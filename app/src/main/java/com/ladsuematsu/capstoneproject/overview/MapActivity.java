@@ -37,7 +37,7 @@ public class MapActivity extends AppCompatActivity {
 
         @Override
         public void onPlaceSelected(com.google.android.gms.location.places.Place place) {
-            Log.i(TAG, "Place: " + place.getName());
+            Log.i(TAG, "PlaceEntry: " + place.getName());
         }
 
         @Override

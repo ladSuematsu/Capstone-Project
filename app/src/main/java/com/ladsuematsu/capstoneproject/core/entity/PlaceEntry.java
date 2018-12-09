@@ -5,7 +5,7 @@ import com.google.firebase.database.Exclude;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Place {
+public class PlaceEntry {
 
     private String uid;
     private String name;
@@ -13,18 +13,18 @@ public class Place {
     @Exclude private double latitude;
     @Exclude private double longitude;
 
-    public Place() { }
+    public PlaceEntry() { }
 
 
-    public Place(String name) {
+    public PlaceEntry(String name) {
         this.name = name;
     }
-    public Place(String uid, String name) {
+    public PlaceEntry(String uid, String name) {
         this.uid = uid;
         this.name = name;
     }
 
-    public Place(String uid, String name, String address, double latitude, double longitude) {
+    public PlaceEntry(String uid, String name, String address, double latitude, double longitude) {
         this.uid = uid;
         this.name = name;
         this.address = address;

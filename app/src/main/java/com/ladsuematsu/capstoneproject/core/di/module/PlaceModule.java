@@ -8,14 +8,14 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.ladsuematsu.capstoneproject.core.data.persistence.DataProvider;
-import com.ladsuematsu.capstoneproject.core.entity.Place;
+import com.ladsuematsu.capstoneproject.core.entity.PlaceEntry;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class PlaceModule implements DataProvider<Place, String> {
+public class PlaceModule implements DataProvider<PlaceEntry, String> {
     private static final String PLACE_PATH = "places";
     private final DatabaseReference databaseReference;
 
@@ -26,22 +26,22 @@ public class PlaceModule implements DataProvider<Place, String> {
     }
 
     @Override
-    public void fetch(String searchKey, final ProviderListener<Place> listener) {
+    public void fetch(String searchKey, final ProviderListener<PlaceEntry> listener) {
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                List<Place> places = new ArrayList<>();
+                List<PlaceEntry> placeEntries = new ArrayList<>();
 
                 for (DataSnapshot childDataSnapshot: dataSnapshot.getChildren()) {
 
-                    Place place = childDataSnapshot.getValue(Place.class);
+                    PlaceEntry placeEntry = childDataSnapshot.getValue(PlaceEntry.class);
 
-                    places.add(place);
+                    placeEntries.add(placeEntry);
 
                 }
 
                 if (listener != null) {
-                    listener.onSuccess(places);
+                    listener.onSuccess(placeEntries);
                 }
             }
 
@@ -54,7 +54,7 @@ public class PlaceModule implements DataProvider<Place, String> {
     }
 
     @Override
-    public void create(Place entity) {
+    public void create(PlaceEntry entity) {
         String key = databaseReference.push().getKey();
 
         entity.setUid(key);
@@ -67,7 +67,7 @@ public class PlaceModule implements DataProvider<Place, String> {
     }
 
     @Override
-    public void update(Place entity) {
+    public void update(PlaceEntry entity) {
         Map<String, Object> map = entity.toMap();
 
         Map<String, Object> updates = new HashMap<>();

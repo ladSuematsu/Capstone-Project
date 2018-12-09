@@ -3,7 +3,7 @@ package com.ladsuematsu.capstoneproject.core.di.component;
 import com.ladsuematsu.capstoneproject.core.data.persistence.DataProvider;
 import com.ladsuematsu.capstoneproject.core.di.module.AuthModule;
 import com.ladsuematsu.capstoneproject.core.di.module.PlaceModule;
-import com.ladsuematsu.capstoneproject.core.entity.Place;
+import com.ladsuematsu.capstoneproject.core.entity.PlaceEntry;
 
 import java.lang.ref.WeakReference;
 
@@ -29,7 +29,7 @@ public class AppComponent {
         return authModule.get();
     }
 
-    public DataProvider<Place, String> getPlaceRepository() {
+    public DataProvider<PlaceEntry, String> getPlaceRepository() {
         if (placeModule == null || placeModule.get() != null) {
             placeModule = new WeakReference<>(new PlaceModule());
         }
