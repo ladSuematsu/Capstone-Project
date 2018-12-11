@@ -9,9 +9,9 @@ public class PlaceEntry {
 
     private String uid;
     private String name;
-    @Exclude private String address;
-    @Exclude private double latitude;
-    @Exclude private double longitude;
+    private String address;
+    private double latitude;
+    private double longitude;
 
     public PlaceEntry() { }
 
@@ -38,6 +38,18 @@ public class PlaceEntry {
 
     public String getName() {
         return name;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
     }
 
     public void setUid(String uid) { this.uid = uid; }
