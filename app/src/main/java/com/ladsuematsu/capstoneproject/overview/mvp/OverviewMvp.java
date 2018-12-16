@@ -4,18 +4,26 @@ package com.ladsuematsu.capstoneproject.overview.mvp;
 import com.ladsuematsu.capstoneproject.core.entity.PlaceEntry;
 import com.ladsuematsu.capstoneproject.core.mvp.Mvp;
 
-import java.util.List;
-
 public interface OverviewMvp {
     interface View {
-        void onSelectedPlace();
+        void onSelectedPlace(PlaceEntry placeEntry);
+        void onPlaceLoaded(PlaceEntry placeEntry);
+        void addMarker(String key, double latitude, double longitude);
+        void addMarkerForCurrentLocation(double latitude, double longitude);
+
+        void removeMarker(String placeKey);
     }
 
     interface Model extends Mvp.Model<Model.Callback> {
         void refreshPlaces();
 
         interface Callback {
-            void onRefreshedPlaces(List<PlaceEntry> places);
+            void onRefreshedPlace(PlaceEntry place);
+            void onPlaceExit(String placeKey);
+
+            void onPlaceMoved(String key, double latitude, double longitude);
+
+            void onCurrentLocation(double latitude, double longitude);
         }
     }
 

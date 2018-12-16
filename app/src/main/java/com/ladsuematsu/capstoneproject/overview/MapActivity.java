@@ -22,15 +22,76 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.ladsuematsu.capstoneproject.DrugstorePanelInfo;
 import com.ladsuematsu.capstoneproject.R;
+import com.ladsuematsu.capstoneproject.core.entity.PlaceEntry;
 import com.ladsuematsu.capstoneproject.newplace.activity.NewPlaceActivity;
+import com.ladsuematsu.capstoneproject.overview.mvp.OverviewMvp;
+import com.ladsuematsu.capstoneproject.overview.mvp.model.OverviewModel;
+import com.ladsuematsu.capstoneproject.overview.mvp.presenter.OverviewPresenter;
 import com.ladsuematsu.capstoneproject.search.PlaceSearchActivity;
+
+import java.util.HashMap;
 
 public class MapActivity extends AppCompatActivity {
 
+    private static final float DEFAULT_MAP_ZOOM = 15.0F;
+    private static final String DETAIL_PANEL_TAG = "detail_panel_tag";
+
+    private OverviewPresenter presenter;
     private SupportMapFragment mapFragment;
     private GoogleMap map;
     private SearchView searchView;
+    private SupportPlaceAutocompleteFragment placeAutoCompleteFragment;
+    private final HashMap<String, Marker> markerMapping = new HashMap<>();
+
+    private GoogleMap.OnMarkerClickListener markerClickListener = new GoogleMap.OnMarkerClickListener() {
+        @Override
+        public boolean onMarkerClick(Marker marker) {
+            String placeKey = (String) marker.getTag();
+
+            presenter.selectPlace(placeKey);
+
+            return true;
+        }
+    };
+    private OverviewMvp.View observer = new OverviewMvp.View() {
+        @Override
+        public void
+        addMarkerForCurrentLocation(double latitude, double longitude) {
+            LatLng coordinates = new LatLng(latitude, longitude);
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(coordinates, DEFAULT_MAP_ZOOM));
+            map.setMyLocationEnabled(true);
+        }
+
+        @Override
+        public void removeMarker(String placeKey) {
+            if (markerMapping.containsKey(placeKey)) {
+                markerMapping.get(placeKey).remove();
+            }
+        }
+
+        @Override
+        public void onSelectedPlace(PlaceEntry placeEntry) {
+            DrugstorePanelInfo panelInfo = DrugstorePanelInfo.newInstance(placeEntry);
+
+            panelInfo.show(getSupportFragmentManager(), DETAIL_PANEL_TAG);
+        }
+
+        @Override
+        public void onPlaceLoaded(PlaceEntry place) {
+        }
+
+        @Override
+        public void addMarker(String key, double latitude, double longitude) {
+            LatLng coordinates = new LatLng(latitude, longitude);
+            Marker marker = map.addMarker(new MarkerOptions().position(coordinates));
+            marker.setTag(key);
+
+            markerMapping.put(key, marker);
+        }
+
+    };
 
     PlaceSelectionListener placeSelectionListener = new PlaceSelectionListener() {
         String TAG = "PLACES_API";
@@ -47,32 +108,26 @@ public class MapActivity extends AppCompatActivity {
         }
     };
 
+
     private final OnMapReadyCallback onMapReadyCallback = new OnMapReadyCallback() {
 
         @Override
         public void onMapReady(GoogleMap googleMap) {
             map = googleMap;
+            map.setOnMarkerClickListener(markerClickListener);
 
-            LatLng home = new LatLng(0.0D, 0.0D);
-            map.addMarker(new MarkerOptions().position(home).title(getString(R.string.current_position))).setTag("NON");
-            map.moveCamera(CameraUpdateFactory.newLatLng(home));
-            map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-                @Override
-                public boolean onMarkerClick(Marker marker) {
-                    return marker.getTag().equals("NON");
-                }
-            });
+            presenter.requestPlacesInVicinity();
         }
     };
 
-    private SupportPlaceAutocompleteFragment placeAutoCompleteFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
         setupViews();
+
+        presenter = new OverviewPresenter(new OverviewModel(this));
     }
 
     @Override
@@ -82,6 +137,7 @@ public class MapActivity extends AppCompatActivity {
         placeAutoCompleteFragment = (SupportPlaceAutocompleteFragment) getSupportFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
         placeAutoCompleteFragment.setOnPlaceSelectedListener(placeSelectionListener);
 
+        presenter.attachView(observer);
     }
 
     private void setupViews() {

@@ -53,7 +53,7 @@ public class LoginPresenter implements Mvp.Presenter<LoginMvp.View> {
     @Override
     public void detachView() {
         presenterHelper.detachView();
-        model.detach();
+        model.detachCallback();
     }
 
     public void doLogin(String login, String password) {

@@ -9,6 +9,7 @@ import android.support.design.widget.BottomSheetDialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -47,6 +48,9 @@ public abstract class InfoPanelBottomSheetDialog extends BottomSheetDialogFragme
 
         setPanelTitle(panelTitle);
         panelButtonDismiss.setOnClickListener(dismissButtonClickListener);
+
+        FrameLayout content = view.findViewById(R.id.content);
+        inflateContent(content, getLayoutInflater());
     }
 
     protected abstract void inflateContent(ViewGroup content, LayoutInflater inflater);

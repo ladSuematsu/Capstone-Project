@@ -24,23 +24,27 @@ public class GeoModule {
     private final DatabaseReference placeDetailsReference;
         private final DatabaseReference geoReference;
         private final GeoFire geoFire;
+        private GeoQuery geoQuery;
+        private GeoObserver geoObserver;
 
-        public interface GeoObserver {
-            void onChange(PlaceEntry placeEntry);
-            void onExit(String key);
-            void onMoved(String key, double latitude, double longitude);
-            void onError(int code, String errorLog);
-        }
 
-        public GeoObserver geoObserver;
-        
+    public interface GeoObserver {
+        void onChange(PlaceEntry placeEntry);
+        void onExit(String key);
+        void onMoved(String key, double latitude, double longitude);
+        void onError(int code, String errorLog);
+    }
 
         private final GeoQueryEventListener geoQueryEventListener = new GeoQueryEventListener() {
             @Override
             public void onKeyEntered(String key, GeoLocation location) {
+                Log.d(TAG, "onKeyEntered, key: " + key + ", " + location.longitude + "|" + location.longitude);
+
                 placeDetailsReference.child(key).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        Log.d(TAG, "Recoverde detail data for place with key: " + dataSnapshot.getKey());
+
                         PlaceEntry placeEntry = dataSnapshot.getValue(PlaceEntry.class);
 
                         if (geoObserver != null) {
@@ -67,16 +71,20 @@ public class GeoModule {
 
             @Override
             public void onKeyExited(String key) {
-                if (geoObserver != null) {
-                    geoObserver.onExit(key);
-                }
+                Log.d(TAG, "onKeyExited, key: " + key);
+
+                if (geoObserver == null) { return; }
+
+                geoObserver.onExit(key);
             }
 
             @Override
             public void onKeyMoved(String key, GeoLocation location) {
-                if (geoObserver != null) {
-                    geoObserver.onMoved(key, location.latitude, location.longitude);
-                }
+                Log.d(TAG, "onKeyMoved, key: " + key + ", " + location.longitude + "|" + location.longitude);
+
+                if (geoObserver == null) { return; }
+
+                geoObserver.onMoved(key, location.latitude, location.longitude);
             }
 
             @Override
@@ -98,6 +106,8 @@ public class GeoModule {
                         .append("Details: ")
                         .append(error.getDetails()).toString();
 
+                Log.e(TAG, errorLog, error.toException());
+
                 geoObserver.onError(error.getCode(), errorLog);
 
             }
@@ -106,12 +116,11 @@ public class GeoModule {
         public GeoModule() {
             DatabaseReference placesRoot = FirebaseDatabase.getInstance().getReference().child(PLACE_PATH);
             placeDetailsReference = placesRoot.child(DETAIL_PATH);
-            geoReference = placeDetailsReference.child(GEO_PATH);
+            geoReference = placesRoot.child(GEO_PATH);
             geoFire = new GeoFire(geoReference);
         }
 
 
-        GeoQuery geoQuery;
         public void setSearch( double latitude, double longitude, double radius){
 
             GeoLocation center = new GeoLocation(latitude, longitude);

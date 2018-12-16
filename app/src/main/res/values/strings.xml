@@ -20,4 +20,5 @@
     <string name="error_incorrect_credentials">Username or password is incorrect</string>
     <string name="error_signup_failure">Could not register new user</string>
     <string name="place_search_hint">Type in an address or location name</string>
+    <string name="content_undefined">undefined</string>
 </resources>

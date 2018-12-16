@@ -19,7 +19,7 @@ public class LoginModel     implements LoginMvp.Model {
     }
 
     @Override
-    public void detach() {
+    public void detachCallback() {
         this.callback = null;
     }
 

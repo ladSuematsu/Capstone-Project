@@ -1,7 +1,10 @@
 package com.ladsuematsu.capstoneproject.core.di.component;
 
+import android.content.Context;
+
 import com.ladsuematsu.capstoneproject.core.data.persistence.DataProvider;
 import com.ladsuematsu.capstoneproject.core.di.module.AuthModule;
+import com.ladsuematsu.capstoneproject.core.di.module.GeoModule;
 import com.ladsuematsu.capstoneproject.core.di.module.PlaceModule;
 import com.ladsuematsu.capstoneproject.core.entity.PlaceEntry;
 
@@ -12,6 +15,7 @@ public class AppComponent {
 
     private WeakReference<AuthModule> authModule;
     private WeakReference<PlaceModule> placeModule;
+    private WeakReference<GeoModule> geoModule;
 
     public static AppComponent getInstance() {
         return appComponent;
@@ -37,4 +41,11 @@ public class AppComponent {
         return placeModule.get();
     }
 
+    public GeoModule getGeoRepository() {
+        if (geoModule == null || geoModule.get() != null) {
+            geoModule = new WeakReference<>(new GeoModule());
+        }
+
+        return geoModule.get();
+    }
 }

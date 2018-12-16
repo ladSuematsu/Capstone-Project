@@ -10,7 +10,7 @@ public interface Mvp {
 
         interface Model<C> {
                 void attachCallback(C callback);
-                void detach();
+                void detachCallback();
         }
 
 }
