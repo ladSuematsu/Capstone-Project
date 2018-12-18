@@ -42,7 +42,6 @@ public class MapActivity extends AppCompatActivity {
     private SupportMapFragment mapFragment;
     private GoogleMap map;
     private SearchView searchView;
-    private SupportPlaceAutocompleteFragment placeAutoCompleteFragment;
     private final HashMap<String, Marker> markerMapping = new HashMap<>();
 
     private GoogleMap.OnMarkerClickListener markerClickListener = new GoogleMap.OnMarkerClickListener() {
@@ -134,8 +133,6 @@ public class MapActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        placeAutoCompleteFragment = (SupportPlaceAutocompleteFragment) getSupportFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
-        placeAutoCompleteFragment.setOnPlaceSelectedListener(placeSelectionListener);
 
         presenter.attachView(observer);
     }
@@ -159,19 +156,22 @@ public class MapActivity extends AppCompatActivity {
 
         searchView = findViewById(R.id.search_bar);
         searchView.setIconifiedByDefault(false);
+        searchView.setFocusable(false);
 
-//        searchView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                ((SearchView) v).setIconified(false);
-//            }
-//        });
-//        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
-//            @Override
-//            public boolean onClose() {
-//
-//            }
-//        });
+        searchView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((SearchView) v).setIconified(false);
+                startActivity(new Intent(MapActivity.this, PlaceSearchActivity.class));
+            }
+        });
+        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
+            @Override
+            public boolean onClose() {
+                return false;
+            }
+        });
+
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         ComponentName componentName = new ComponentName(getApplicationContext(), PlaceSearchActivity.class);
         searchView.setSearchableInfo(searchManager.getSearchableInfo(componentName));

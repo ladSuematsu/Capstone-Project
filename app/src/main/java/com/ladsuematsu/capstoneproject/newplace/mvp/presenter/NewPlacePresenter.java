@@ -1,5 +1,6 @@
 package com.ladsuematsu.capstoneproject.newplace.mvp.presenter;
 
+import com.ladsuematsu.capstoneproject.core.adapter.DayListenerObserver;
 import com.ladsuematsu.capstoneproject.core.data.adapter.ApiPlaceAdapter;
 import com.ladsuematsu.capstoneproject.core.data.persistence.DataProvider;
 import com.ladsuematsu.capstoneproject.core.di.component.AppComponent;
@@ -8,8 +9,11 @@ import com.ladsuematsu.capstoneproject.core.mvp.Mvp;
 import com.ladsuematsu.capstoneproject.core.mvp.presenter.MvpPresenter;
 import com.ladsuematsu.capstoneproject.newplace.mvp.NewPlaceMvp;
 
+import java.util.HashMap;
+import java.util.Map;
 
-public class NewPlacePresenter implements Mvp.Presenter<NewPlaceMvp.View> {
+
+public class NewPlacePresenter implements Mvp.Presenter<NewPlaceMvp.View>, DayListenerObserver.HolderListener {
     private MvpPresenter<NewPlaceMvp.View> presenterHelper = new MvpPresenter<>();
     private DataProvider<PlaceEntry, String> placeProvider = AppComponent.getInstance().getPlaceRepository();
     private ApiPlaceAdapter selectedPlaceAdapter;
@@ -49,5 +53,30 @@ public class NewPlacePresenter implements Mvp.Presenter<NewPlaceMvp.View> {
         placeProvider.create(placeEntry);
 
         presenterHelper.getView().onPlaceSavedSuccess();
+    }
+
+    Map<Integer, String[]> hoursMapping = new HashMap<>();
+
+    @Override
+    public void bindHolder(int itemPosition, DayListenerObserver.HolderObserver observer) {
+        String hourStart = "";
+        String hourEnd = "";
+
+        if (hoursMapping.containsKey(itemPosition)) {
+            String[] hours = hoursMapping.get(itemPosition);
+
+            assert hours != null;
+            hourStart = hours[0];
+            hourEnd = hours[1];
+        }
+
+
+        observer.fillHours(hourStart, hourEnd);
+        observer.fillWeekDay(null);
+    }
+
+    @Override
+    public void onWeekEdit(int itemPosition) {
+
     }
 }

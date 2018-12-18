@@ -9,6 +9,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.ladsuematsu.capstoneproject.core.data.persistence.DataProvider;
 import com.ladsuematsu.capstoneproject.core.entity.PlaceEntry;
@@ -25,6 +26,7 @@ public class PlaceModule implements DataProvider<PlaceEntry, String> {
     private static final String TAG = PlaceModule.class.getSimpleName();
     private final GeoFire geoFireInstance;
     private final DatabaseReference placesReference;
+    private ValueEventListener valueEventListener;
 
 
     public PlaceModule() {
@@ -36,20 +38,26 @@ public class PlaceModule implements DataProvider<PlaceEntry, String> {
         geoFireInstance = new GeoFire(geoReference);
     }
 
+
     @Override
     public void fetch(String searchKey, final ProviderListener<PlaceEntry> listener) {
-        DatabaseReference resultReference = searchKey != null && !searchKey.isEmpty()
-                ? placesReference.child(searchKey)
-                : placesReference;
+        if (searchKey == null || searchKey.isEmpty()) { return; }
 
-        resultReference.addListenerForSingleValueEvent(new ValueEventListener() {
+        Query resultReference = placesReference.orderByChild("name").startAt(searchKey).limitToFirst(100);
+
+        if (valueEventListener != null) {
+            resultReference.removeEventListener(valueEventListener);
+        }
+
+        valueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 List<PlaceEntry> placeEntries = new ArrayList<>();
 
-                for (DataSnapshot childDataSnapshot: dataSnapshot.getChildren()) {
+                for (DataSnapshot childDataSnapshot : dataSnapshot.getChildren()) {
 
                     PlaceEntry placeEntry = childDataSnapshot.getValue(PlaceEntry.class);
+
 
                     placeEntries.add(placeEntry);
 
@@ -65,7 +73,9 @@ public class PlaceModule implements DataProvider<PlaceEntry, String> {
                 Log.e(TAG, "Place search failed", databaseError.toException());
                 listener.onFailure();
             }
-        });
+        };
+
+        resultReference.addListenerForSingleValueEvent(valueEventListener);
 
     }
 

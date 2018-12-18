@@ -21,4 +21,18 @@
     <string name="error_signup_failure">Could not register new user</string>
     <string name="place_search_hint">Type in an address or location name</string>
     <string name="content_undefined">undefined</string>
+    <string name="day_closed">closed</string>
+    <string name="label_edit">edit</string>
+
+    <string name="label_sunday">Sunday</string>
+    <string name="label_monday">Monday</string>
+    <string name="label_thursday">Thursday</string>
+    <string name="label_wednesday">Wednesday</string>
+    <string name="label_tuesday">Tuesday</string>
+    <string name="label_friday">Friday</string>
+    <string name="label_saturday">Saturday</string>
+
+    <string name="edit_place_save">Save</string>
+
+
 </resources>

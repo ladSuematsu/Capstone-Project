@@ -11,8 +11,10 @@ import android.view.MenuItem;
 import android.widget.SearchView;
 
 import com.ladsuematsu.capstoneproject.R;
+import com.ladsuematsu.capstoneproject.search.mvp.SearchPlaceMvp;
+import com.ladsuematsu.capstoneproject.search.mvp.presenter.SearchPlacePresenter;
 
-public class PlaceSearchActivity extends AppCompatActivity {
+public class PlaceSearchActivity extends AppCompatActivity implements SearchPlaceMvp.View {
 
     private static final String TAG = PlaceSearchActivity.class.getSimpleName();
 
@@ -24,17 +26,23 @@ public class PlaceSearchActivity extends AppCompatActivity {
 
         @Override
         public boolean onQueryTextChange(String s) {
-            return false;
+
+            presenter.search(s);
+
+            return true;
         }
     };
 
     private String searchQuery;
     private SearchView menuSearchView;
+    private SearchPlacePresenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_place_search);
+        presenter = new SearchPlacePresenter();
+        presenter.attachView(this);
 
         processQuery(getIntent());
     }
@@ -82,5 +90,10 @@ public class PlaceSearchActivity extends AppCompatActivity {
         }
 
         return false;
+    }
+
+    @Override
+    public void onResultRefresh() {
+
     }
 }
