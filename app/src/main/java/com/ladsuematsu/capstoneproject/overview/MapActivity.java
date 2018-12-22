@@ -10,11 +10,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.SearchView;
 
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
-import com.google.android.gms.location.places.ui.SupportPlaceAutocompleteFragment;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -22,9 +22,12 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.ladsuematsu.capstoneproject.AuthWatcher;
 import com.ladsuematsu.capstoneproject.DrugstorePanelInfo;
 import com.ladsuematsu.capstoneproject.R;
+import com.ladsuematsu.capstoneproject.core.di.component.AppComponent;
 import com.ladsuematsu.capstoneproject.core.entity.PlaceEntry;
+import com.ladsuematsu.capstoneproject.login.activity.LoginActivity;
 import com.ladsuematsu.capstoneproject.newplace.activity.NewPlaceActivity;
 import com.ladsuematsu.capstoneproject.overview.mvp.OverviewMvp;
 import com.ladsuematsu.capstoneproject.overview.mvp.model.OverviewModel;
@@ -38,11 +41,76 @@ public class MapActivity extends AppCompatActivity {
     private static final float DEFAULT_MAP_ZOOM = 15.0F;
     private static final String DETAIL_PANEL_TAG = "detail_panel_tag";
 
+    private AuthWatcher authWatcher;
     private OverviewPresenter presenter;
     private SupportMapFragment mapFragment;
     private GoogleMap map;
     private SearchView searchView;
     private final HashMap<String, Marker> markerMapping = new HashMap<>();
+    private ImageButton logoutButton;
+    private FloatingActionButton addPlaceFab;
+    private FloatingActionButton loginFab;
+
+    private AuthWatcher.AuthListener authWatcherListener = new AuthWatcher.AuthListener() {
+        @Override
+        public void onValidated() {
+
+            addPlaceFab.setVisibility(View.VISIBLE);
+            logoutButton.setVisibility(View.VISIBLE);
+            loginFab.setVisibility(View.GONE);
+
+            if (map != null) {
+                presenter.requestPlacesInVicinity();
+            }
+
+        }
+
+        @Override
+        public void onInvalidated() {
+
+            startActivity(new Intent(MapActivity.this, LoginActivity.class));
+
+        }
+
+        @Override
+        public void onRefreshInvalidated() {
+
+            logoutButton.setVisibility(View.GONE);
+            addPlaceFab.setVisibility(View.GONE);
+            loginFab.setVisibility(View.VISIBLE);
+
+            presenter.requestPlacesInVicinity();
+        }
+    };
+
+    private View.OnClickListener logoutClick = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            authWatcher.doLogout();
+        }
+    };
+
+    private View.OnClickListener onLoginClick = new View.OnClickListener() {
+
+        @Override
+        public void onClick(View v) {
+
+            Intent intent = new Intent(MapActivity.this, LoginActivity.class);
+            startActivity(intent);
+
+        }
+    };
+
+    private View.OnClickListener onPlaceAddClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+
+            Intent intent = new Intent(MapActivity.this, NewPlaceActivity.class);
+            startActivity(intent);
+
+
+        }
+    };
 
     private GoogleMap.OnMarkerClickListener markerClickListener = new GoogleMap.OnMarkerClickListener() {
         @Override
@@ -54,6 +122,7 @@ public class MapActivity extends AppCompatActivity {
             return true;
         }
     };
+
     private OverviewMvp.View observer = new OverviewMvp.View() {
         @Override
         public void
@@ -124,17 +193,34 @@ public class MapActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        presenter = new OverviewPresenter(new OverviewModel(this));
+        authWatcher = AppComponent.getInstance().getAuthWatcher();
+
         setupViews();
 
-        presenter = new OverviewPresenter(new OverviewModel(this));
     }
 
     @Override
     protected void onStart() {
         super.onStart();
 
-
+        authWatcher.attach(authWatcherListener);
         presenter.attachView(observer);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        authWatcher.refreshSession();
+    }
+
+    @Override
+    protected void onStop() {
+        authWatcher.detach();
+        presenter.detachView();
+
+        super.onStop();
     }
 
     private void setupViews() {
@@ -142,13 +228,14 @@ public class MapActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                addNewPlace();
-            }
-        });
+        logoutButton = findViewById(R.id.log_out);
+        logoutButton.setOnClickListener(logoutClick);
+
+        addPlaceFab = findViewById(R.id.fab);
+        addPlaceFab.setOnClickListener(onPlaceAddClickListener);
+
+        loginFab = findViewById(R.id.login_fab);
+        loginFab.setOnClickListener(onLoginClick);
 
         mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -175,11 +262,6 @@ public class MapActivity extends AppCompatActivity {
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         ComponentName componentName = new ComponentName(getApplicationContext(), PlaceSearchActivity.class);
         searchView.setSearchableInfo(searchManager.getSearchableInfo(componentName));
-    }
-
-    private void addNewPlace() {
-        Intent intent = new Intent(this, NewPlaceActivity.class);
-        startActivity(intent);
     }
 
 }

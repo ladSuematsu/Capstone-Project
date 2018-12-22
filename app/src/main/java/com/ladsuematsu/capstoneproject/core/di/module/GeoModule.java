@@ -138,7 +138,12 @@ public class GeoModule {
 
         public void startListening(GeoObserver geoObserver) {
             this.geoObserver = geoObserver;
-            geoQuery.addGeoQueryEventListener(geoQueryEventListener);
+
+            try {
+                geoQuery.addGeoQueryEventListener(geoQueryEventListener);
+            } catch (IllegalArgumentException e) {
+                Log.e(TAG, "Listener already mapped.", e);
+            }
         }
 
         public void unlisten() {

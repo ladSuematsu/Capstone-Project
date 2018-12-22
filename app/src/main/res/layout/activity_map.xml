@@ -13,15 +13,29 @@
         android:background="@color/colorTransparent"
         app:popupTheme="@style/AppTheme.PopupOverlay" />
 
-    <include layout="@layout/content_map" />
+    <include
+        android:id="@+id/include"
+        layout="@layout/content_map" />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+
+    <FrameLayout
         android:layout_gravity="bottom|center_horizontal"
-        android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@drawable/ic_add_white_24dp" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/fab_margin"
+            app:srcCompat="@drawable/ic_add_white_24dp" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/login_fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/fab_margin"
+            app:srcCompat="@drawable/ic_person_white_24dp" />
+    </FrameLayout>
 
     <android.support.design.card.MaterialCardView
         android:layout_marginStart="@dimen/activity_horizontal_margin"
@@ -39,5 +53,13 @@
             app:layout_anchor="@+id/toolbar"
             app:layout_anchorGravity="top|center_horizontal" />
     </android.support.design.card.MaterialCardView>
+
+    <ImageButton
+        android:id="@+id/log_out"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_anchor="@+id/include"
+        app:layout_anchorGravity="start|bottom"
+        app:srcCompat="@drawable/ic_directions_run_white_24dp" />
 
 </android.support.design.widget.CoordinatorLayout>

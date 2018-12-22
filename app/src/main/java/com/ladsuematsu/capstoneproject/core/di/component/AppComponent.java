@@ -1,9 +1,9 @@
 package com.ladsuematsu.capstoneproject.core.di.component;
 
-import android.content.Context;
-
+import com.ladsuematsu.capstoneproject.AuthWatcher;
 import com.ladsuematsu.capstoneproject.core.data.persistence.DataProvider;
 import com.ladsuematsu.capstoneproject.core.di.module.AuthModule;
+import com.ladsuematsu.capstoneproject.core.di.module.FirebaseAuthWatcher;
 import com.ladsuematsu.capstoneproject.core.di.module.GeoModule;
 import com.ladsuematsu.capstoneproject.core.di.module.PlaceModule;
 import com.ladsuematsu.capstoneproject.core.entity.PlaceEntry;
@@ -48,4 +48,9 @@ public class AppComponent {
 
         return geoModule.get();
     }
+
+    public AuthWatcher getAuthWatcher() {
+        return new FirebaseAuthWatcher();
+    }
+
 }
