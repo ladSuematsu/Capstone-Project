@@ -15,6 +15,7 @@ public interface DayListenerObserver {
 
         void onWeekEdit(int itemPosition);
 
+        void setOnCheckToggle(boolean checked);
     }
 
 }

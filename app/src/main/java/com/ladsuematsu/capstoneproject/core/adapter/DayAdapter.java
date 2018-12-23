@@ -7,20 +7,33 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.ladsuematsu.capstoneproject.R;
 
-public class DayAdapter extends RecyclerView.Adapter<DayAdapter.DayHolder> {
-    private static final int ITEM_COUNT = 7;
+public class DayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private static final int SUNDAY = 0;
-    private static final int MONDAY = 1;
-    private static final int THURSDAY = 2;
-    private static final int WEDNESDAY = 3;
-    private static final int TUESDAY = 4;
-    private static final int FRIDAY = 5;
-    private static final int SATURDAY = 6;
+    private static int VIEWTYPE_TEXT_FIELDS = 1;
+    private static int VIEWTYPE_CHECKABLE = 2;
+    private static int VIEWTYPE_WEEKDAY = 3;
+
+    private static final int ITEM_COUNT = 11;
+
+    private static final int TEXT_EDIT_FIELDS = 0;
+
+    private static final int HOME_DELIVERY_CHECKBOX = 1;
+    private static final int ANIMAL_FRIENDLY_CHECKBOX = 2;
+    private static final int DISABLED_PEOPLE_FACILITIES_CHECKBOX = 3;
+
+    private static final int SUNDAY = 4;
+    private static final int MONDAY = 5;
+    private static final int THURSDAY = 6;
+    private static final int WEDNESDAY = 7;
+    private static final int TUESDAY = 8;
+    private static final int FRIDAY = 9;
+    private static final int SATURDAY = 10;
+
 
     private final String labelSunday;
     private final String labelMonday;
@@ -47,25 +60,94 @@ public class DayAdapter extends RecyclerView.Adapter<DayAdapter.DayHolder> {
         labelSaturday = resources.getString(R.string.label_saturday);
     }
 
+    @Override
+    public int getItemViewType(int position) {
+
+        int viewType;
+
+        if (position < HOME_DELIVERY_CHECKBOX) {
+            viewType = VIEWTYPE_TEXT_FIELDS;
+        } else if (position < SUNDAY) {
+            viewType = VIEWTYPE_CHECKABLE;
+        } else {
+            viewType = VIEWTYPE_WEEKDAY;
+        }
+
+        return viewType;
+
+    }
 
     @NonNull
     @Override
-    public DayHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
 
-        View view = inflater.inflate(R.layout.day_card, viewGroup, false);
+        RecyclerView.ViewHolder viewHolder;
+        if (viewType == VIEWTYPE_TEXT_FIELDS) {
 
-        return new DayHolder(view);
+            View view = inflater.inflate(R.layout.item_edit_text_fieds, viewGroup, false);
+            viewHolder = new TextFieldHolder(view);
+
+        } else if (viewType == VIEWTYPE_CHECKABLE) {
+
+            View view = inflater.inflate(R.layout.item_edit_checkable, viewGroup, false);
+            viewHolder = new CheckableHolder(view);
+
+        } else {
+
+            View view = inflater.inflate(R.layout.day_card, viewGroup, false);
+            viewHolder = new DayHolder(view);
+
+        }
+
+        return viewHolder;
 
     }
 
     @Override
-    public void onBindViewHolder(@NonNull DayHolder dayViewholder, int i) {
-        listener.bindHolder(i, dayViewholder.holderObserver);
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
+        if (i < ANIMAL_FRIENDLY_CHECKBOX) {
+
+        } else if (i < SUNDAY) {
+
+        } else {
+
+            listener.bindHolder(i, ((DayHolder) viewHolder).holderObserver);
+
+        }
     }
 
     @Override
     public int getItemCount() {
         return ITEM_COUNT;
+    }
+
+    class TextFieldHolder extends RecyclerView.ViewHolder {
+        public TextFieldHolder(@NonNull View itemView) {
+            super(itemView);
+        }
+    }
+
+    class CheckableHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        private final TextView label;
+        private final CheckBox checkBox;
+
+        public CheckableHolder(@NonNull View itemView) {
+            super(itemView);
+            label = itemView.findViewById(R.id.labelText);
+            checkBox = itemView.findViewById(R.id.checkbox);
+
+//            label.setOnClickListener(this);
+//            checkBox.setOnClickListener(this);
+            itemView.setOnClickListener(this);
+        }
+
+
+        @Override
+        public void onClick(View v) {
+            checkBox.setChecked(!checkBox.isChecked());
+
+            listener.setOnCheckToggle(checkBox.isChecked());
+        }
     }
 
     class DayHolder extends RecyclerView.ViewHolder {
@@ -146,4 +228,5 @@ public class DayAdapter extends RecyclerView.Adapter<DayAdapter.DayHolder> {
         };
 
     }
+
 }

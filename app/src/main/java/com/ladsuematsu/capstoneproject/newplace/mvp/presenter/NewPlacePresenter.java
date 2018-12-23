@@ -79,4 +79,9 @@ public class NewPlacePresenter implements Mvp.Presenter<NewPlaceMvp.View>, DayLi
     public void onWeekEdit(int itemPosition) {
 
     }
+
+    @Override
+    public void setOnCheckToggle(boolean checked) {
+
+    }
 }
