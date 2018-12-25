@@ -34,5 +34,8 @@
 
     <string name="edit_place_save">Save</string>
 
+    <string name="amenity_animal_friendly">Animal friendly</string>
+    <string name="amenity_disabled_people">Facilities for disabled people</string>
+    <string name="amenity_door_delivery">Does door delivery</string>
 
 </resources>

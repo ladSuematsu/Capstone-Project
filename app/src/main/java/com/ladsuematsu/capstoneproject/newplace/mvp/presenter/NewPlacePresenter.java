@@ -18,6 +18,9 @@ public class NewPlacePresenter implements Mvp.Presenter<NewPlaceMvp.View>, DayLi
     private DataProvider<PlaceEntry, String> placeProvider = AppComponent.getInstance().getPlaceRepository();
     private ApiPlaceAdapter selectedPlaceAdapter;
 
+    private final HashMap<Integer, Boolean> serviceCheck = new HashMap<>();
+    private final HashMap<Integer, String> openWeekdayHours = new HashMap<>();
+
     public NewPlacePresenter() {
 
     }
@@ -44,18 +47,28 @@ public class NewPlacePresenter implements Mvp.Presenter<NewPlaceMvp.View>, DayLi
     public void savePlace(String name) {
         if(!presenterHelper.isViewAttached()) { return; }
 
-        PlaceEntry placeEntry = new PlaceEntry(selectedPlaceAdapter.getId(),
-                name,
-                selectedPlaceAdapter.getAddress(),
-                selectedPlaceAdapter.getLatitude(),
-                selectedPlaceAdapter.getLongitude());
+//        PlaceEntry placeEntry = new PlaceEntry(selectedPlaceAdapter.getId(),
+//                name,
+//                selectedPlaceAdapter.getAddress(),
+//                selectedPlaceAdapter.getLatitude(),
+//                selectedPlaceAdapter.getLongitude(),
+//                serviceCheck.containsKey(HOME_DELIVERY_CHECKBOX) ? serviceCheck.get(HOME_DELIVERY_CHECKBOX) : false,
+//                serviceCheck.containsKey(ANIMAL_FRIENDLY_CHECKBOX) ? serviceCheck.get(ANIMAL_FRIENDLY_CHECKBOX) : false,
+//                serviceCheck.containsKey(DISABLED_PEOPLE_FACILITIES_CHECKBOX) ? serviceCheck.get(DISABLED_PEOPLE_FACILITIES_CHECKBOX) : false
+//        );
 
-        placeProvider.create(placeEntry);
-
-        presenterHelper.getView().onPlaceSavedSuccess();
+//        placeProvider.create(placeEntry);
+//        presenterHelper.getView().onPlaceSavedSuccess();
     }
 
     Map<Integer, String[]> hoursMapping = new HashMap<>();
+
+    @Override
+    public void bindHolder(int itemPosition, DayListenerObserver.TextfieldObserver observer) {
+        observer.setPlaceName("");
+        observer.setAddress("");
+        observer.setPhoneNumber("");
+    }
 
     @Override
     public void bindHolder(int itemPosition, DayListenerObserver.HolderObserver observer) {
@@ -76,12 +89,30 @@ public class NewPlacePresenter implements Mvp.Presenter<NewPlaceMvp.View>, DayLi
     }
 
     @Override
+    public void bindHolder(int itemPosition, DayListenerObserver.CheckableObserver observer) {
+        switch (itemPosition) {
+            case HOME_DELIVERY_CHECKBOX:
+
+                break;
+            case ANIMAL_FRIENDLY_CHECKBOX:
+
+                break;
+            case DISABLED_PEOPLE_FACILITIES_CHECKBOX:
+
+                break;
+        }
+
+        observer.setCheckable(itemPosition, serviceCheck.containsKey(itemPosition) ? serviceCheck.get(itemPosition) : false);
+
+    }
+
+    @Override
     public void onWeekEdit(int itemPosition) {
 
     }
 
     @Override
-    public void setOnCheckToggle(boolean checked) {
-
+    public void setOnCheckToggle(int checkCode, boolean checked) {
+        serviceCheck.put(checkCode, checked);
     }
 }

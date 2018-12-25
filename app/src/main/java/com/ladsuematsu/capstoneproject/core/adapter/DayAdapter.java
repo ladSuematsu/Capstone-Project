@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.ladsuematsu.capstoneproject.R;
@@ -35,6 +36,9 @@ public class DayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int SATURDAY = 10;
 
 
+    private final String labelAmenityDisabledPeople;
+    private final String labelAmenityAnimalFriendly;
+    private final String labelAmenityDoorDelivery;
     private final String labelSunday;
     private final String labelMonday;
     private final String labelThursday;
@@ -50,6 +54,10 @@ public class DayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         this.inflater = inflater;
         this.listener = listener;
         Resources resources = inflater.getContext().getResources();
+
+        labelAmenityAnimalFriendly = resources.getString(R.string.amenity_animal_friendly);
+        labelAmenityDisabledPeople = resources.getString(R.string.amenity_disabled_people);
+        labelAmenityDoorDelivery = resources.getString(R.string.amenity_door_delivery);
 
         labelSunday = resources.getString(R.string.label_sunday);
         labelMonday = resources.getString(R.string.label_monday);
@@ -105,15 +113,59 @@ public class DayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
-        if (i < ANIMAL_FRIENDLY_CHECKBOX) {
 
-        } else if (i < SUNDAY) {
 
-        } else {
+        if (viewHolder instanceof TextFieldHolder) {
 
-            listener.bindHolder(i, ((DayHolder) viewHolder).holderObserver);
+            TextFieldHolder textFieldHolder = (TextFieldHolder) viewHolder;
+
+            listener.bindHolder(i, textFieldHolder.observer);
+
+        } else if (viewHolder instanceof CheckableHolder) {
+
+            CheckableHolder checkableHolder = (CheckableHolder) viewHolder;
+
+            String label;
+            switch (i) {
+
+                case HOME_DELIVERY_CHECKBOX:
+                    label = labelAmenityDoorDelivery;
+                    break;
+
+                case ANIMAL_FRIENDLY_CHECKBOX:
+                    label = labelAmenityAnimalFriendly;
+                    break;
+
+                case DISABLED_PEOPLE_FACILITIES_CHECKBOX:
+                    label = labelAmenityDisabledPeople;
+                    break;
+
+                default:
+                    label = "";
+
+            }
+
+            checkableHolder.observer.setLabel(label);
+            listener.bindHolder(i, checkableHolder.observer);
+
+        } else if (viewHolder instanceof  DayHolder) {
+
+            DayHolder dayHolder = (DayHolder) viewHolder;
+
+            switch (i) {
+                case SUNDAY:
+                case MONDAY:
+                case THURSDAY:
+                case WEDNESDAY:
+                case TUESDAY:
+                case FRIDAY:
+                case SATURDAY:
+                    listener.bindHolder(i, dayHolder.holderObserver);
+                    break;
+            }
 
         }
+
     }
 
     @Override
@@ -122,14 +174,44 @@ public class DayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     class TextFieldHolder extends RecyclerView.ViewHolder {
+
+        private final EditText placeName;
+        private final EditText placeAddress;
+        private final EditText placePhoneNumber;
+
         public TextFieldHolder(@NonNull View itemView) {
             super(itemView);
+
+            placeName = itemView.findViewById(R.id.name);
+            placeAddress = itemView.findViewById(R.id.address);
+            placePhoneNumber = itemView.findViewById(R.id.telephone);
+
         }
+
+        public DayListenerObserver.TextfieldObserver observer = new DayListenerObserver.TextfieldObserver() {
+
+            @Override
+            public void setPlaceName(String name) {
+                placeName.setText(name);
+            }
+
+            @Override
+            public void setAddress(String address) {
+                placeAddress.setText(address);
+            }
+
+            @Override
+            public void setPhoneNumber(String phoneNumber) {
+                placePhoneNumber.setText(phoneNumber);
+            }
+
+        };
     }
 
     class CheckableHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private final TextView label;
         private final CheckBox checkBox;
+        private int code;
 
         public CheckableHolder(@NonNull View itemView) {
             super(itemView);
@@ -139,15 +221,30 @@ public class DayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 //            label.setOnClickListener(this);
 //            checkBox.setOnClickListener(this);
             itemView.setOnClickListener(this);
+            checkBox.setOnClickListener(this);
         }
-
 
         @Override
         public void onClick(View v) {
-            checkBox.setChecked(!checkBox.isChecked());
+            if (v.getId() != checkBox.getId()) {
+                checkBox.setChecked(!checkBox.isChecked());
+            }
 
-            listener.setOnCheckToggle(checkBox.isChecked());
+            listener.setOnCheckToggle(code, checkBox.isChecked());
         }
+
+        private final DayListenerObserver.CheckableObserver observer = new DayListenerObserver.CheckableObserver() {
+            @Override
+            public void setLabel(String labelText) {
+                label.setText(labelText);
+            }
+
+            @Override
+            public void setCheckable(int code, boolean checked) {
+                CheckableHolder.this.code = code;
+                checkBox.setChecked(checked);
+            }
+        };
     }
 
     class DayHolder extends RecyclerView.ViewHolder {

@@ -15,6 +15,9 @@ public class PlaceEntry implements Parcelable {
     private String address;
     private double latitude;
     private double longitude;
+    private boolean doesDoorDelivery;
+    private boolean isAnimalFriendly;
+    private boolean hasFacilitiesForDisabledPeople;
 
     public PlaceEntry() { }
 
@@ -35,12 +38,43 @@ public class PlaceEntry implements Parcelable {
         this.longitude = longitude;
     }
 
+    public PlaceEntry(String uid, String name, String address, double latitude, double longitude, boolean doesDoorDelivery, boolean isAnimalFriendly, boolean hasFacilitiesForDisabledPeople) {
+        this.uid = uid;
+        this.name = name;
+        this.address = address;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.doesDoorDelivery = doesDoorDelivery;
+        this.isAnimalFriendly = isAnimalFriendly;
+        this.hasFacilitiesForDisabledPeople = hasFacilitiesForDisabledPeople;
+    }
+
     protected PlaceEntry(Parcel in) {
         uid = in.readString();
         name = in.readString();
         address = in.readString();
         latitude = in.readDouble();
         longitude = in.readDouble();
+        doesDoorDelivery = in.readByte() != 0;
+        isAnimalFriendly = in.readByte() != 0;
+        hasFacilitiesForDisabledPeople = in.readByte() != 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(uid);
+        dest.writeString(name);
+        dest.writeString(address);
+        dest.writeDouble(latitude);
+        dest.writeDouble(longitude);
+        dest.writeByte((byte) (doesDoorDelivery ? 1 : 0));
+        dest.writeByte((byte) (isAnimalFriendly ? 1 : 0));
+        dest.writeByte((byte) (hasFacilitiesForDisabledPeople ? 1 : 0));
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
     public static final Creator<PlaceEntry> CREATOR = new Creator<PlaceEntry>() {
@@ -86,20 +120,23 @@ public class PlaceEntry implements Parcelable {
         result.put("address", address);
         result.put("latitude", latitude);
         result.put("longitude", longitude);
+        result.put("doesDoorDelivery", doesDoorDelivery);
+        result.put("isAnimalFriendly", isAnimalFriendly);
+        result.put("hasFacilitiesForDisabledPeople", hasFacilitiesForDisabledPeople);
         return result;
     }
 
     @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(uid);
-        dest.writeString(name);
-        dest.writeString(address);
-        dest.writeDouble(latitude);
-        dest.writeDouble(longitude);
+    public String toString() {
+        return "PlaceEntry{" +
+                "uid='" + uid + '\'' +
+                ", name='" + name + '\'' +
+                ", address='" + address + '\'' +
+                ", latitude=" + latitude +
+                ", longitude=" + longitude +
+                ", doesDoorDelivery=" + doesDoorDelivery +
+                ", isAnimalFriendly=" + isAnimalFriendly +
+                ", hasFacilitiesForDisabledPeople=" + hasFacilitiesForDisabledPeople +
+                '}';
     }
 }

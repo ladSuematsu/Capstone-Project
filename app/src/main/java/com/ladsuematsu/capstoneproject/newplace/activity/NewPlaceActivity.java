@@ -106,7 +106,8 @@ public class NewPlaceActivity extends AppCompatActivity  {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_edit_place_save) {
-            newPlacePresenter.savePlace(nameForm.getText().toString());
+//            newPlacePresenter.savePlace(nameForm.getText().toString());
+            newPlacePresenter.savePlace("");
 
             return true;
         }
@@ -115,12 +116,7 @@ public class NewPlaceActivity extends AppCompatActivity  {
     }
 
     private void setupViews() {
-        nameForm = findViewById(R.id.name);
-        addressForm = findViewById(R.id.address);
-        searchAddress = findViewById(R.id.search_address);
         days = findViewById(R.id.open_days);
-
-        searchAddress.setOnClickListener(searchAddressClickListener);
 
         days.setNestedScrollingEnabled(false);
         days.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
