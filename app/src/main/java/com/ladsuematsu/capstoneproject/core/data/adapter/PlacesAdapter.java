@@ -23,6 +23,11 @@ public class PlacesAdapter implements ApiPlaceAdapter {
     }
 
     @Override
+    public String getPhoneNumber() {
+        return place.getPhoneNumber() != null ? place.getPhoneNumber().toString() : "";
+    }
+
+    @Override
     public String getAddress() {
         return place.getAddress().toString();
     }

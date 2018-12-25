@@ -3,6 +3,8 @@ package com.ladsuematsu.capstoneproject.core.adapter;
 import android.content.res.Resources;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -178,17 +180,77 @@ public class DayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         private final EditText placeName;
         private final EditText placeAddress;
         private final EditText placePhoneNumber;
+        private final Button searchAddressButton;
 
-        public TextFieldHolder(@NonNull View itemView) {
+        TextFieldHolder(@NonNull View itemView) {
             super(itemView);
 
             placeName = itemView.findViewById(R.id.name);
             placeAddress = itemView.findViewById(R.id.address);
             placePhoneNumber = itemView.findViewById(R.id.telephone);
+            searchAddressButton = itemView.findViewById(R.id.search_address);
+
+            placeName.addTextChangedListener(placeTextWatcher);
+            placePhoneNumber.addTextChangedListener(phoneTextWatcher);
+            searchAddressButton.setOnClickListener(searchButtonListener);
 
         }
 
-        public DayListenerObserver.TextfieldObserver observer = new DayListenerObserver.TextfieldObserver() {
+
+        private final View.OnClickListener searchButtonListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.onAddressSearch();
+            }
+        };
+
+        private final TextWatcher placeTextWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+                if (listener == null) {
+                    return;
+                }
+
+                listener.onEditName(s.toString());
+
+            }
+        };
+
+        private final TextWatcher phoneTextWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+                if (listener == null) {
+                    return;
+                }
+
+                listener.onEditPhoneNumber(s.toString());
+
+            }
+        };
+
+        final DayListenerObserver.TextfieldObserver observer = new DayListenerObserver.TextfieldObserver() {
 
             @Override
             public void setPlaceName(String name) {
@@ -213,7 +275,7 @@ public class DayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         private final CheckBox checkBox;
         private int code;
 
-        public CheckableHolder(@NonNull View itemView) {
+        CheckableHolder(@NonNull View itemView) {
             super(itemView);
             label = itemView.findViewById(R.id.labelText);
             checkBox = itemView.findViewById(R.id.checkbox);
@@ -233,7 +295,7 @@ public class DayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             listener.setOnCheckToggle(code, checkBox.isChecked());
         }
 
-        private final DayListenerObserver.CheckableObserver observer = new DayListenerObserver.CheckableObserver() {
+        final DayListenerObserver.CheckableObserver observer = new DayListenerObserver.CheckableObserver() {
             @Override
             public void setLabel(String labelText) {
                 label.setText(labelText);

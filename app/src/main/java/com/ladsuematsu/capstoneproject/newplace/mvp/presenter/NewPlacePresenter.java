@@ -18,6 +18,8 @@ public class NewPlacePresenter implements Mvp.Presenter<NewPlaceMvp.View>, DayLi
     private DataProvider<PlaceEntry, String> placeProvider = AppComponent.getInstance().getPlaceRepository();
     private ApiPlaceAdapter selectedPlaceAdapter;
 
+    private String placeName = "";
+    private String placePhoneNumber ="";
     private final HashMap<Integer, Boolean> serviceCheck = new HashMap<>();
     private final HashMap<Integer, String> openWeekdayHours = new HashMap<>();
 
@@ -39,16 +41,18 @@ public class NewPlacePresenter implements Mvp.Presenter<NewPlaceMvp.View>, DayLi
         if(!presenterHelper.isViewAttached()) { return; }
 
         this.selectedPlaceAdapter = placeAdapter;
+        placeName = this.selectedPlaceAdapter.getName().isEmpty() ? placeName : this.selectedPlaceAdapter.getName();
+        placePhoneNumber = this.selectedPlaceAdapter.getPhoneNumber().isEmpty() ? placePhoneNumber : this.selectedPlaceAdapter.getPhoneNumber();
 
-        presenterHelper.getView().onSelectedName(placeAdapter.getName());
-        presenterHelper.getView().onSelectedAddress(placeAdapter.getAddress());
+        presenterHelper.getView().refreshFields();
     }
 
-    public void savePlace(String name) {
+    public void savePlace() {
         if(!presenterHelper.isViewAttached()) { return; }
 
 //        PlaceEntry placeEntry = new PlaceEntry(selectedPlaceAdapter.getId(),
 //                name,
+//                phoneNumber,
 //                selectedPlaceAdapter.getAddress(),
 //                selectedPlaceAdapter.getLatitude(),
 //                selectedPlaceAdapter.getLongitude(),
@@ -65,9 +69,10 @@ public class NewPlacePresenter implements Mvp.Presenter<NewPlaceMvp.View>, DayLi
 
     @Override
     public void bindHolder(int itemPosition, DayListenerObserver.TextfieldObserver observer) {
-        observer.setPlaceName("");
-        observer.setAddress("");
-        observer.setPhoneNumber("");
+        observer.setPlaceName(placeName);
+        observer.setPhoneNumber(placePhoneNumber);
+
+        observer.setAddress(selectedPlaceAdapter != null ? selectedPlaceAdapter.getAddress() : "");
     }
 
     @Override
@@ -104,6 +109,23 @@ public class NewPlacePresenter implements Mvp.Presenter<NewPlaceMvp.View>, DayLi
 
         observer.setCheckable(itemPosition, serviceCheck.containsKey(itemPosition) ? serviceCheck.get(itemPosition) : false);
 
+    }
+
+    @Override
+    public void onAddressSearch() {
+        if (!presenterHelper.isViewAttached()) { return; }
+
+        presenterHelper.getView().onSearchAddress();
+    }
+
+    @Override
+    public void onEditName(String name) {
+        placeName = name;
+    }
+
+    @Override
+    public void onEditPhoneNumber(String phoneNumber) {
+        placePhoneNumber = phoneNumber;
     }
 
     @Override

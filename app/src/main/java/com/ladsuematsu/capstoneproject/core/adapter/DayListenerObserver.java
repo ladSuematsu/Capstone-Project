@@ -35,11 +35,18 @@ public interface DayListenerObserver {
         void bindHolder(int itemPosition, HolderObserver observer);
         void bindHolder(int itemPosition, CheckableObserver observer);
 
-        void onWeekEdit(int itemPosition);
 
+        void onAddressSearch();
+
+        void onEditName(String name);
+
+        void onEditPhoneNumber(String phoneNumber);
+
+        void onWeekEdit(int itemPosition);
         int HOME_DELIVERY_CHECKBOX = 1;
         int ANIMAL_FRIENDLY_CHECKBOX = 2;
         int DISABLED_PEOPLE_FACILITIES_CHECKBOX = 3;
+
         void setOnCheckToggle(int checkCode, boolean checked);
     }
 

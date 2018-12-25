@@ -13,6 +13,7 @@ public class PlaceEntry implements Parcelable {
     private String uid;
     private String name;
     private String address;
+    private String phoneNumber;
     private double latitude;
     private double longitude;
     private boolean doesDoorDelivery;
@@ -38,10 +39,11 @@ public class PlaceEntry implements Parcelable {
         this.longitude = longitude;
     }
 
-    public PlaceEntry(String uid, String name, String address, double latitude, double longitude, boolean doesDoorDelivery, boolean isAnimalFriendly, boolean hasFacilitiesForDisabledPeople) {
+    public PlaceEntry(String uid, String name, String phoneNumber, String address, double latitude, double longitude, boolean doesDoorDelivery, boolean isAnimalFriendly, boolean hasFacilitiesForDisabledPeople) {
         this.uid = uid;
         this.name = name;
         this.address = address;
+        this.phoneNumber = phoneNumber;
         this.latitude = latitude;
         this.longitude = longitude;
         this.doesDoorDelivery = doesDoorDelivery;
@@ -53,6 +55,7 @@ public class PlaceEntry implements Parcelable {
         uid = in.readString();
         name = in.readString();
         address = in.readString();
+        phoneNumber = in.readString();
         latitude = in.readDouble();
         longitude = in.readDouble();
         doesDoorDelivery = in.readByte() != 0;
@@ -65,6 +68,7 @@ public class PlaceEntry implements Parcelable {
         dest.writeString(uid);
         dest.writeString(name);
         dest.writeString(address);
+        dest.writeString(phoneNumber);
         dest.writeDouble(latitude);
         dest.writeDouble(longitude);
         dest.writeByte((byte) (doesDoorDelivery ? 1 : 0));
@@ -118,6 +122,7 @@ public class PlaceEntry implements Parcelable {
         result.put("uid", uid);
         result.put("name", name);
         result.put("address", address);
+        result.put("phoneNumber", phoneNumber);
         result.put("latitude", latitude);
         result.put("longitude", longitude);
         result.put("doesDoorDelivery", doesDoorDelivery);
@@ -132,6 +137,7 @@ public class PlaceEntry implements Parcelable {
                 "uid='" + uid + '\'' +
                 ", name='" + name + '\'' +
                 ", address='" + address + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
                 ", latitude=" + latitude +
                 ", longitude=" + longitude +
                 ", doesDoorDelivery=" + doesDoorDelivery +

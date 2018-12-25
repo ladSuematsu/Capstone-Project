@@ -5,9 +5,9 @@ import com.ladsuematsu.capstoneproject.core.mvp.Mvp;
 
 public interface NewPlaceMvp {
     interface View {
-        void onSelectedName(String name);
-        void onSelectedAddress(String address);
         void onPlaceSavedSuccess();
+        void onSearchAddress();
+        void refreshFields();
     }
 
     interface Model extends Mvp.Model<Model.Callback> {

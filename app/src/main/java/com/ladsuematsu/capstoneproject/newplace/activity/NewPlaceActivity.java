@@ -7,11 +7,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
 
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
@@ -23,40 +22,33 @@ import com.ladsuematsu.capstoneproject.newplace.mvp.NewPlaceMvp;
 import com.ladsuematsu.capstoneproject.newplace.mvp.presenter.NewPlacePresenter;
 
 public class NewPlaceActivity extends AppCompatActivity  {
+    private static final String LOG_TAG = NewPlaceActivity.class.getSimpleName();
 
     private final static int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
 
     private final NewPlacePresenter newPlacePresenter = new NewPlacePresenter();
 
-    private EditText addressForm;
-    private EditText nameForm;
-    private Button searchAddress;
     private RecyclerView days;
 
-    private final View.OnClickListener searchAddressClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            triggerAddressSearch();
-        }
-    };
-
     private final NewPlaceMvp.View viewImplementation = new NewPlaceMvp.View() {
-        @Override
-        public void onSelectedName (String name){
-            nameForm.setText(name);
-        }
-
-        @Override
-        public void onSelectedAddress(String address){
-            addressForm.setText(address);
-        }
 
         @Override
         public void onPlaceSavedSuccess() {
             setResult(RESULT_OK);
             finish();
         }
+
+        @Override
+        public void onSearchAddress() {
+            triggerAddressSearch();
+        }
+
+        @Override
+        public void refreshFields() {
+            daysAdapter.notifyDataSetChanged();
+        }
     };
+
     private DayAdapter daysAdapter;
 
     @Override
@@ -106,8 +98,7 @@ public class NewPlaceActivity extends AppCompatActivity  {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_edit_place_save) {
-//            newPlacePresenter.savePlace(nameForm.getText().toString());
-            newPlacePresenter.savePlace("");
+            newPlacePresenter.savePlace();
 
             return true;
         }
@@ -130,9 +121,9 @@ public class NewPlaceActivity extends AppCompatActivity  {
 
             startActivityForResult(placeAutocompleteIntent, PLACE_AUTOCOMPLETE_REQUEST_CODE);
         } catch (GooglePlayServicesRepairableException e) {
-            e.printStackTrace();
+            Log.e(LOG_TAG, "Something went wrong", e);
         } catch (GooglePlayServicesNotAvailableException e) {
-            e.printStackTrace();
+            Log.e(LOG_TAG, "Something went wrong", e);
         }
     }
 
