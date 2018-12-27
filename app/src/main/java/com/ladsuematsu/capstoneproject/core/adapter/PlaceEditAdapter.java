@@ -18,7 +18,7 @@ import com.ladsuematsu.capstoneproject.R;
 
 import java.util.Locale;
 
-public class DayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class PlaceEditAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private static int VIEWTYPE_TEXT_FIELDS = 1;
     private static int VIEWTYPE_CHECKABLE = 2;
@@ -41,7 +41,7 @@ public class DayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private final DayListenerObserver.HolderListener listener;
     private final String openCloseHourFormat;
 
-    public DayAdapter(LayoutInflater inflater, DayListenerObserver.HolderListener listener) {
+    public PlaceEditAdapter(LayoutInflater inflater, DayListenerObserver.HolderListener listener) {
         this.inflater = inflater;
         this.listener = listener;
         Resources resources = inflater.getContext().getResources();

@@ -17,7 +17,7 @@ import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.ladsuematsu.capstoneproject.R;
-import com.ladsuematsu.capstoneproject.core.adapter.DayAdapter;
+import com.ladsuematsu.capstoneproject.core.adapter.PlaceEditAdapter;
 import com.ladsuematsu.capstoneproject.core.data.adapter.PlacesAdapter;
 import com.ladsuematsu.capstoneproject.newplace.mvp.NewPlaceMvp;
 import com.ladsuematsu.capstoneproject.newplace.mvp.presenter.NewPlacePresenter;
@@ -65,7 +65,7 @@ public class NewPlaceActivity extends AppCompatActivity  {
         }
     };
 
-    private DayAdapter daysAdapter;
+    private PlaceEditAdapter daysAdapter;
     private RecyclerView formFields;
 
     @Override
@@ -83,7 +83,7 @@ public class NewPlaceActivity extends AppCompatActivity  {
 
         if (daysAdapter == null || formFields.getAdapter() == null) {
 
-            daysAdapter = new DayAdapter(getLayoutInflater(), newPlacePresenter);
+            daysAdapter = new PlaceEditAdapter(getLayoutInflater(), newPlacePresenter);
             formFields.setAdapter(daysAdapter);
 
         }
