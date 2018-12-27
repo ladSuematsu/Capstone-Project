@@ -8,6 +8,7 @@ public interface NewPlaceMvp {
         void onPlaceSavedSuccess();
         void onSearchAddress();
         void refreshFields();
+        void onEditWeek(int hourOfDay, int minutes);
     }
 
     interface Model extends Mvp.Model<Model.Callback> {

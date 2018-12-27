@@ -1,5 +1,6 @@
 package com.ladsuematsu.capstoneproject.newplace.activity;
 
+import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,6 +12,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TimePicker;
 
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
@@ -27,8 +29,13 @@ public class NewPlaceActivity extends AppCompatActivity  {
     private final static int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
 
     private final NewPlacePresenter newPlacePresenter = new NewPlacePresenter();
+    private final TimePickerDialog.OnTimeSetListener timePickerListener = new TimePickerDialog.OnTimeSetListener() {
+        @Override
+        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+            newPlacePresenter.onTimeSet(hourOfDay, minute);
+        }
+    };
 
-    private RecyclerView days;
 
     private final NewPlaceMvp.View viewImplementation = new NewPlaceMvp.View() {
 
@@ -47,9 +54,15 @@ public class NewPlaceActivity extends AppCompatActivity  {
         public void refreshFields() {
             daysAdapter.notifyDataSetChanged();
         }
+
+        @Override
+        public void onEditWeek(int hourOfDay, int minutes) {
+            openTimeEdit(hourOfDay, minutes);
+        }
     };
 
     private DayAdapter daysAdapter;
+    private RecyclerView days;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,5 +140,10 @@ public class NewPlaceActivity extends AppCompatActivity  {
         }
     }
 
+
+    private void openTimeEdit(int hourOfDay, int minute) {
+        TimePickerDialog timePickerDialog = new TimePickerDialog(this, timePickerListener, hourOfDay, minute, true);
+        timePickerDialog.show();
+    }
 }
 

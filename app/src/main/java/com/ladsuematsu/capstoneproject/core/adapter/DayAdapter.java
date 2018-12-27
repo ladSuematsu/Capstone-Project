@@ -4,6 +4,7 @@ import android.content.res.Resources;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,8 @@ import android.widget.TextView;
 
 import com.ladsuematsu.capstoneproject.R;
 
+import java.util.Locale;
+
 public class DayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private static int VIEWTYPE_TEXT_FIELDS = 1;
@@ -23,19 +26,19 @@ public class DayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private static final int ITEM_COUNT = 11;
 
-    private static final int TEXT_EDIT_FIELDS = 0;
-
-    private static final int HOME_DELIVERY_CHECKBOX = 1;
-    private static final int ANIMAL_FRIENDLY_CHECKBOX = 2;
-    private static final int DISABLED_PEOPLE_FACILITIES_CHECKBOX = 3;
-
-    private static final int SUNDAY = 4;
-    private static final int MONDAY = 5;
-    private static final int THURSDAY = 6;
-    private static final int WEDNESDAY = 7;
-    private static final int TUESDAY = 8;
-    private static final int FRIDAY = 9;
-    private static final int SATURDAY = 10;
+//    private static final int TEXT_EDIT_FIELDS = 0;
+//
+//    private static final int HOME_DELIVERY_CHECKBOX = 1;
+//    private static final int ANIMAL_FRIENDLY_CHECKBOX = 2;
+//    private static final int DISABLED_PEOPLE_FACILITIES_CHECKBOX = 3;
+//
+//    private static final int SUNDAY = 4;
+//    private static final int MONDAY = 5;
+//    private static final int THURSDAY = 6;
+//    private static final int WEDNESDAY = 7;
+//    private static final int TUESDAY = 8;
+//    private static final int FRIDAY = 9;
+//    private static final int SATURDAY = 10;
 
 
     private final String labelAmenityDisabledPeople;
@@ -51,6 +54,7 @@ public class DayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private final LayoutInflater inflater;
     private final DayListenerObserver.HolderListener listener;
+    private final String openCloseHourFormat;
 
     public DayAdapter(LayoutInflater inflater, DayListenerObserver.HolderListener listener) {
         this.inflater = inflater;
@@ -68,6 +72,8 @@ public class DayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         labelTuesday = resources.getString(R.string.label_tuesday);
         labelFriday = resources.getString(R.string.label_friday);
         labelSaturday = resources.getString(R.string.label_saturday);
+        
+        openCloseHourFormat = resources.getString(R.string.open_close_hour_weekday_format);
     }
 
     @Override
@@ -75,9 +81,9 @@ public class DayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         int viewType;
 
-        if (position < HOME_DELIVERY_CHECKBOX) {
+        if (position < DayListenerObserver.HOME_DELIVERY_CHECKBOX) {
             viewType = VIEWTYPE_TEXT_FIELDS;
-        } else if (position < SUNDAY) {
+        } else if (position < DayListenerObserver.SUNDAY) {
             viewType = VIEWTYPE_CHECKABLE;
         } else {
             viewType = VIEWTYPE_WEEKDAY;
@@ -130,15 +136,15 @@ public class DayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             String label;
             switch (i) {
 
-                case HOME_DELIVERY_CHECKBOX:
+                case DayListenerObserver.HOME_DELIVERY_CHECKBOX:
                     label = labelAmenityDoorDelivery;
                     break;
 
-                case ANIMAL_FRIENDLY_CHECKBOX:
+                case DayListenerObserver.ANIMAL_FRIENDLY_CHECKBOX:
                     label = labelAmenityAnimalFriendly;
                     break;
 
-                case DISABLED_PEOPLE_FACILITIES_CHECKBOX:
+                case DayListenerObserver.DISABLED_PEOPLE_FACILITIES_CHECKBOX:
                     label = labelAmenityDisabledPeople;
                     break;
 
@@ -155,13 +161,13 @@ public class DayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             DayHolder dayHolder = (DayHolder) viewHolder;
 
             switch (i) {
-                case SUNDAY:
-                case MONDAY:
-                case THURSDAY:
-                case WEDNESDAY:
-                case TUESDAY:
-                case FRIDAY:
-                case SATURDAY:
+                case DayListenerObserver.SUNDAY:
+                case DayListenerObserver.MONDAY:
+                case DayListenerObserver.THURSDAY:
+                case DayListenerObserver.WEDNESDAY:
+                case DayListenerObserver.TUESDAY:
+                case DayListenerObserver.FRIDAY:
+                case DayListenerObserver.SATURDAY:
                     listener.bindHolder(i, dayHolder.holderObserver);
                     break;
             }
@@ -280,8 +286,6 @@ public class DayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             label = itemView.findViewById(R.id.labelText);
             checkBox = itemView.findViewById(R.id.checkbox);
 
-//            label.setOnClickListener(this);
-//            checkBox.setOnClickListener(this);
             itemView.setOnClickListener(this);
             checkBox.setOnClickListener(this);
         }
@@ -311,6 +315,7 @@ public class DayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     class DayHolder extends RecyclerView.ViewHolder {
 
+        private int weekCode;
         private final TextView weekDay;
         private final TextView openClosed;
         private final Button edit;
@@ -330,7 +335,7 @@ public class DayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             public void onClick(View v) {
                 if (listener == null) { return; }
 
-                listener.onWeekEdit(getAdapterPosition());
+                listener.onWeekEdit(getAdapterPosition(), weekCode);
             }
         };
 
@@ -343,31 +348,31 @@ public class DayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     weekDayLabel = weekDay;
                 } else {
                     switch(getAdapterPosition()) {
-                        case SUNDAY:
+                        case DayListenerObserver.SUNDAY:
                             weekDayLabel = labelSunday;
                             break;
 
-                        case MONDAY:
+                        case DayListenerObserver.MONDAY:
                             weekDayLabel = labelMonday;
                             break;
 
-                        case THURSDAY:
+                        case DayListenerObserver.THURSDAY:
                             weekDayLabel = labelThursday;
                             break;
 
-                        case WEDNESDAY:
+                        case DayListenerObserver.WEDNESDAY:
                             weekDayLabel = labelWednesday;
                             break;
 
-                        case TUESDAY:
+                        case DayListenerObserver.TUESDAY:
                             weekDayLabel = labelTuesday;
                             break;
 
-                        case FRIDAY:
+                        case DayListenerObserver.FRIDAY:
                             weekDayLabel = labelFriday;
                             break;
 
-                        case SATURDAY:
+                        case DayListenerObserver.SATURDAY:
                             weekDayLabel = labelSaturday;
                             break;
 
@@ -381,8 +386,15 @@ public class DayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             }
 
             @Override
-            public void fillHours(String hourStart, String hourEnd) {
-                DayHolder.this.openClosed.setText(hourStart + hourEnd);
+            public void fillHours(int weekCode, String hourStart, String hourEnd) {
+                DayHolder.this.weekCode = weekCode;
+
+
+                String displayText = TextUtils.isEmpty(hourStart) || TextUtils.isEmpty(hourEnd)
+                                        ? ""
+                                        : String.format(Locale.ROOT, openCloseHourFormat, hourStart, hourEnd);
+                
+                DayHolder.this.openClosed.setText(displayText);
             }
         };
 

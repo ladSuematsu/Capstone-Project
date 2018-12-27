@@ -14,9 +14,7 @@
     <string name="error_invalid_password">This password is too short</string>
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_field_required">This field is required</string>
-    <string name="permission_rationale">"Contacts permissions are needed for providing email
-        completions."
-    </string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email completions."</string>
     <string name="error_incorrect_credentials">Username or password is incorrect</string>
     <string name="error_signup_failure">Could not register new user</string>
     <string name="place_search_hint">Type in an address or location name</string>
@@ -37,5 +35,6 @@
     <string name="amenity_animal_friendly">Animal friendly</string>
     <string name="amenity_disabled_people">Facilities for disabled people</string>
     <string name="amenity_door_delivery">Does door delivery</string>
+    <string name="open_close_hour_weekday_format">%s - %s</string>
 
 </resources>

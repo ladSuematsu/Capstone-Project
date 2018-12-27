@@ -1,12 +1,25 @@
 package com.ladsuematsu.capstoneproject.core.adapter;
 
 public interface DayListenerObserver {
+    int TEXT_EDIT_FIELDS = 0;
+
+    int HOME_DELIVERY_CHECKBOX = 1;
+    int ANIMAL_FRIENDLY_CHECKBOX = 2;
+    int DISABLED_PEOPLE_FACILITIES_CHECKBOX = 3;
+
+    int SUNDAY = 4;
+    int MONDAY = 5;
+    int THURSDAY = 6;
+    int WEDNESDAY = 7;
+    int TUESDAY = 8;
+    int FRIDAY = 9;
+    int SATURDAY = 10;
 
     interface HolderObserver {
 
         void fillWeekDay(String weekDay);
 
-        void fillHours(String hourStart, String hourEnd);
+        void fillHours(int weekCode, String hourStart, String hourEnd);
 
     }
 
@@ -42,7 +55,7 @@ public interface DayListenerObserver {
 
         void onEditPhoneNumber(String phoneNumber);
 
-        void onWeekEdit(int itemPosition);
+        void onWeekEdit(int itemPosition, int weekCode);
         int HOME_DELIVERY_CHECKBOX = 1;
         int ANIMAL_FRIENDLY_CHECKBOX = 2;
         int DISABLED_PEOPLE_FACILITIES_CHECKBOX = 3;
