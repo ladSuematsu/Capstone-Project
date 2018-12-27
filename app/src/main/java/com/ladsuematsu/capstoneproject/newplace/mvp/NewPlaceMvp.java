@@ -8,6 +8,7 @@ public interface NewPlaceMvp {
         void onPlaceSavedSuccess();
         void onSearchAddress();
         void refreshFields();
+        void refreshFields(int position);
         void onEditWeek(int hourOfDay, int minutes);
     }
 

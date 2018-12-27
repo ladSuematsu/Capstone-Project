@@ -11,7 +11,6 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.TimePicker;
 
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
@@ -56,13 +55,18 @@ public class NewPlaceActivity extends AppCompatActivity  {
         }
 
         @Override
+        public void refreshFields(int position) {
+            daysAdapter.notifyItemChanged(position);
+        }
+
+        @Override
         public void onEditWeek(int hourOfDay, int minutes) {
             openTimeEdit(hourOfDay, minutes);
         }
     };
 
     private DayAdapter daysAdapter;
-    private RecyclerView days;
+    private RecyclerView formFields;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,10 +81,10 @@ public class NewPlaceActivity extends AppCompatActivity  {
         super.onStart();
         newPlacePresenter.attachView(viewImplementation);
 
-        if (daysAdapter == null || days.getAdapter() == null) {
+        if (daysAdapter == null || formFields.getAdapter() == null) {
 
             daysAdapter = new DayAdapter(getLayoutInflater(), newPlacePresenter);
-            days.setAdapter(daysAdapter);
+            formFields.setAdapter(daysAdapter);
 
         }
     }
@@ -120,11 +124,10 @@ public class NewPlaceActivity extends AppCompatActivity  {
     }
 
     private void setupViews() {
-        days = findViewById(R.id.open_days);
+        formFields = findViewById(R.id.form_fields);
 
-        days.setNestedScrollingEnabled(false);
-        days.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        days.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+        formFields.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        formFields.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
     }
 
     private void triggerAddressSearch() {

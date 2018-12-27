@@ -227,7 +227,7 @@ public class NewPlacePresenter implements Mvp.Presenter<NewPlaceMvp.View>, DayLi
 
                 pickerCode = IDLE_TIME_PICKER_CODE;
 
-                presenterHelper.getView().refreshFields();
+                presenterHelper.getView().refreshFields(editItemPosition);
 
                 return;
         }

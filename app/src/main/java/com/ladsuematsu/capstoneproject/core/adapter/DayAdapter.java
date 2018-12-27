@@ -26,21 +26,6 @@ public class DayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private static final int ITEM_COUNT = 11;
 
-//    private static final int TEXT_EDIT_FIELDS = 0;
-//
-//    private static final int HOME_DELIVERY_CHECKBOX = 1;
-//    private static final int ANIMAL_FRIENDLY_CHECKBOX = 2;
-//    private static final int DISABLED_PEOPLE_FACILITIES_CHECKBOX = 3;
-//
-//    private static final int SUNDAY = 4;
-//    private static final int MONDAY = 5;
-//    private static final int THURSDAY = 6;
-//    private static final int WEDNESDAY = 7;
-//    private static final int TUESDAY = 8;
-//    private static final int FRIDAY = 9;
-//    private static final int SATURDAY = 10;
-
-
     private final String labelAmenityDisabledPeople;
     private final String labelAmenityAnimalFriendly;
     private final String labelAmenityDoorDelivery;
