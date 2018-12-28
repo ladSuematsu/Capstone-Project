@@ -5,7 +5,9 @@ import android.os.Parcelable;
 
 import com.google.firebase.database.Exclude;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class PlaceEntry implements Parcelable {
@@ -19,6 +21,8 @@ public class PlaceEntry implements Parcelable {
     private boolean doesDoorDelivery;
     private boolean isAnimalFriendly;
     private boolean hasFacilitiesForDisabledPeople;
+
+    @Exclude private List<WeekTime> weekTimes = new ArrayList<>();
 
     public PlaceEntry() { }
 
@@ -114,6 +118,14 @@ public class PlaceEntry implements Parcelable {
     }
 
     public void setUid(String uid) { this.uid = uid; }
+
+    @Exclude public void setWeekTimes(List<WeekTime> weekTimes) {
+        this.weekTimes = weekTimes;
+    }
+
+    @Exclude  public List<WeekTime> getWeekTimes() {
+        return weekTimes;
+    }
 
     // [START post_to_map]
     @Exclude

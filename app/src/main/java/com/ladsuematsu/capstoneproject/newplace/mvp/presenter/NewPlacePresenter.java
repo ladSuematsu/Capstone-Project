@@ -12,6 +12,7 @@ import com.ladsuematsu.capstoneproject.core.mvp.Mvp;
 import com.ladsuematsu.capstoneproject.core.mvp.presenter.MvpPresenter;
 import com.ladsuematsu.capstoneproject.newplace.mvp.NewPlaceMvp;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
 
@@ -62,19 +63,21 @@ public class NewPlacePresenter implements Mvp.Presenter<NewPlaceMvp.View>, DayLi
     public void savePlace() {
         if(!presenterHelper.isViewAttached()) { return; }
 
-//        PlaceEntry placeEntry = new PlaceEntry(selectedPlaceAdapter.getId(),
-//                name,
-//                phoneNumber,
-//                selectedPlaceAdapter.getAddress(),
-//                selectedPlaceAdapter.getLatitude(),
-//                selectedPlaceAdapter.getLongitude(),
-//                serviceCheck.containsKey(HOME_DELIVERY_CHECKBOX) ? serviceCheck.get(HOME_DELIVERY_CHECKBOX) : false,
-//                serviceCheck.containsKey(ANIMAL_FRIENDLY_CHECKBOX) ? serviceCheck.get(ANIMAL_FRIENDLY_CHECKBOX) : false,
-//                serviceCheck.containsKey(DISABLED_PEOPLE_FACILITIES_CHECKBOX) ? serviceCheck.get(DISABLED_PEOPLE_FACILITIES_CHECKBOX) : false
-//        );
+        PlaceEntry placeEntry = new PlaceEntry(selectedPlaceAdapter.getId(),
+                placeName,
+                placePhoneNumber,
+                selectedPlaceAdapter.getAddress(),
+                selectedPlaceAdapter.getLatitude(),
+                selectedPlaceAdapter.getLongitude(),
+                serviceCheck.containsKey(HOME_DELIVERY_CHECKBOX) ? serviceCheck.get(HOME_DELIVERY_CHECKBOX) : false,
+                serviceCheck.containsKey(ANIMAL_FRIENDLY_CHECKBOX) ? serviceCheck.get(ANIMAL_FRIENDLY_CHECKBOX) : false,
+                serviceCheck.containsKey(DISABLED_PEOPLE_FACILITIES_CHECKBOX) ? serviceCheck.get(DISABLED_PEOPLE_FACILITIES_CHECKBOX) : false
+        );
 
-//        placeProvider.create(placeEntry);
-//        presenterHelper.getView().onPlaceSavedSuccess();
+        placeEntry.setWeekTimes(new ArrayList<>(openWeekdayHours.values()));
+
+        placeProvider.create(placeEntry);
+        presenterHelper.getView().onPlaceSavedSuccess();
     }
 
     @Override

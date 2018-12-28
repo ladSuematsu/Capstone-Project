@@ -13,6 +13,7 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.ladsuematsu.capstoneproject.core.data.persistence.DataProvider;
 import com.ladsuematsu.capstoneproject.core.entity.PlaceEntry;
+import com.ladsuematsu.capstoneproject.core.entity.WeekTime;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,9 +24,11 @@ public class PlaceModule implements DataProvider<PlaceEntry, String> {
     static final String PLACE_PATH = "places";
     static final String GEO_PATH = "geo";
     static final String DETAIL_PATH = "details";
+    static final String WEEKTIME_PATH = "weekday_times";
     private static final String TAG = PlaceModule.class.getSimpleName();
     private final GeoFire geoFireInstance;
     private final DatabaseReference placesReference;
+    private final DatabaseReference weekTimeReference;
     private ValueEventListener valueEventListener;
 
 
@@ -33,6 +36,7 @@ public class PlaceModule implements DataProvider<PlaceEntry, String> {
         DatabaseReference placesRoot = FirebaseDatabase.getInstance().getReference().child(PLACE_PATH);
 
         placesReference = placesRoot.child(DETAIL_PATH);
+        weekTimeReference = placesRoot.child(WEEKTIME_PATH);
 
         DatabaseReference geoReference = placesRoot.child(GEO_PATH);
         geoFireInstance = new GeoFire(geoReference);
@@ -81,6 +85,8 @@ public class PlaceModule implements DataProvider<PlaceEntry, String> {
 
     @Override
     public void create(PlaceEntry entity) {
+
+        // Write new Place entry
         String key = placesReference.push().getKey();
 
         entity.setUid(key);
@@ -89,9 +95,22 @@ public class PlaceModule implements DataProvider<PlaceEntry, String> {
         Map<String, Object> updates = new HashMap<>();
         updates.put(key, map);
 
+        // Write Geofire entry
         geoFireInstance.setLocation(key, new GeoLocation(entity.getLatitude(),
                                                             entity.getLongitude()));
         placesReference.updateChildren(updates);
+
+
+        // Writet week times
+        DatabaseReference placeWeekTimeReference = weekTimeReference.child(key);
+        List<WeekTime> weekTimes = entity.getWeekTimes();
+        for (WeekTime weekTime : weekTimes) {
+            DatabaseReference keyReference = placeWeekTimeReference.push();
+
+            weekTime.setPlaceUid(keyReference.getKey());
+            keyReference.setValue(weekTime);
+        }
+
     }
 
     @Override
