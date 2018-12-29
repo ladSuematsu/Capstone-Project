@@ -20,12 +20,15 @@ import java.util.Locale;
 
 public class PlaceEditAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private static int VIEWTYPE_TEXT_FIELDS = 1;
-    private static int VIEWTYPE_CHECKABLE = 2;
-    private static int VIEWTYPE_WEEKDAY = 3;
+    private static int VIEWTYPE_HEADER = 1;
+    private static int VIEWTYPE_TEXT_FIELDS = 2;
+    private static int VIEWTYPE_CHECKABLE = 3;
+    private static int VIEWTYPE_WEEKDAY = 4;
 
-    private static final int ITEM_COUNT = 11;
+    private static final int ITEM_COUNT = DayListenerObserver.ITEM_COUNT;
 
+    private final String labelHeaderCheckfields;
+    private final String labelHeaderWeekdayTimes;
     private final String labelAmenityDisabledPeople;
     private final String labelAmenityAnimalFriendly;
     private final String labelAmenityDoorDelivery;
@@ -46,6 +49,9 @@ public class PlaceEditAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         this.listener = listener;
         Resources resources = inflater.getContext().getResources();
 
+        labelHeaderCheckfields = resources.getString(R.string.place_detail_header_check_fields);
+        labelHeaderWeekdayTimes = resources.getString(R.string.place_detail_header_weekday_times_fields);
+
         labelAmenityAnimalFriendly = resources.getString(R.string.amenity_animal_friendly);
         labelAmenityDisabledPeople = resources.getString(R.string.amenity_disabled_people);
         labelAmenityDoorDelivery = resources.getString(R.string.amenity_door_delivery);
@@ -65,13 +71,32 @@ public class PlaceEditAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     public int getItemViewType(int position) {
 
         int viewType;
+        switch(position) {
+            case DayListenerObserver.TEXT_EDIT_FIELDS:
+                viewType = VIEWTYPE_TEXT_FIELDS;
+                break;
 
-        if (position < DayListenerObserver.HOME_DELIVERY_CHECKBOX) {
-            viewType = VIEWTYPE_TEXT_FIELDS;
-        } else if (position < DayListenerObserver.SUNDAY) {
-            viewType = VIEWTYPE_CHECKABLE;
-        } else {
-            viewType = VIEWTYPE_WEEKDAY;
+            case DayListenerObserver.HOME_DELIVERY_CHECKBOX:
+            case DayListenerObserver.ANIMAL_FRIENDLY_CHECKBOX:
+            case DayListenerObserver.DISABLED_PEOPLE_FACILITIES_CHECKBOX:
+                viewType = VIEWTYPE_CHECKABLE;
+                break;
+
+            case DayListenerObserver.SUNDAY:
+            case DayListenerObserver.MONDAY:
+            case DayListenerObserver.THURSDAY:
+            case DayListenerObserver.WEDNESDAY:
+            case DayListenerObserver.TUESDAY:
+            case DayListenerObserver.FRIDAY:
+            case DayListenerObserver.SATURDAY:
+                viewType = VIEWTYPE_WEEKDAY;
+                break;
+
+            case DayListenerObserver.HEADER_CHECK_ITEMS:
+            case DayListenerObserver.HEADER_WEEKDAY_TIMES:
+            default:
+                viewType = VIEWTYPE_HEADER;
+                break;
         }
 
         return viewType;
@@ -83,7 +108,12 @@ public class PlaceEditAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
 
         RecyclerView.ViewHolder viewHolder;
-        if (viewType == VIEWTYPE_TEXT_FIELDS) {
+        if (viewType == VIEWTYPE_HEADER) {
+
+            View view = inflater.inflate(R.layout.item_header, viewGroup, false);
+            viewHolder = new HeaderHolder(view);
+
+        } else if (viewType == VIEWTYPE_TEXT_FIELDS) {
 
             View view = inflater.inflate(R.layout.item_edit_text_fieds, viewGroup, false);
             viewHolder = new TextFieldHolder(view);
@@ -108,10 +138,32 @@ public class PlaceEditAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
 
 
-        if (viewHolder instanceof TextFieldHolder) {
+        if (viewHolder instanceof HeaderHolder) {
+
+            HeaderHolder holder = (HeaderHolder) viewHolder;
+
+            String headerText;
+            switch (i) {
+
+                case DayListenerObserver.HEADER_CHECK_ITEMS:
+
+                    headerText = labelHeaderCheckfields;
+                    break;
+
+                case DayListenerObserver.HEADER_WEEKDAY_TIMES:
+                    headerText = labelHeaderWeekdayTimes;
+                    break;
+
+                default:
+                    headerText = "";
+            }
+
+
+            holder.headerText.setText(headerText);
+
+        } else if (viewHolder instanceof TextFieldHolder) {
 
             TextFieldHolder textFieldHolder = (TextFieldHolder) viewHolder;
-
             listener.bindHolder(i, textFieldHolder.observer);
 
         } else if (viewHolder instanceof CheckableHolder) {
@@ -144,18 +196,7 @@ public class PlaceEditAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         } else if (viewHolder instanceof  DayHolder) {
 
             DayHolder dayHolder = (DayHolder) viewHolder;
-
-            switch (i) {
-                case DayListenerObserver.SUNDAY:
-                case DayListenerObserver.MONDAY:
-                case DayListenerObserver.THURSDAY:
-                case DayListenerObserver.WEDNESDAY:
-                case DayListenerObserver.TUESDAY:
-                case DayListenerObserver.FRIDAY:
-                case DayListenerObserver.SATURDAY:
-                    listener.bindHolder(i, dayHolder.holderObserver);
-                    break;
-            }
+            listener.bindHolder(i, dayHolder.holderObserver);
 
         }
 
@@ -166,6 +207,16 @@ public class PlaceEditAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         return ITEM_COUNT;
     }
 
+
+    class HeaderHolder extends RecyclerView.ViewHolder {
+
+        private final TextView headerText;
+
+        public HeaderHolder(View itemView) {
+            super(itemView);
+            headerText = itemView.findViewById(R.id.item_header);
+        }
+    }
     class TextFieldHolder extends RecyclerView.ViewHolder {
 
         private final EditText placeName;
