@@ -1,19 +1,25 @@
 package com.ladsuematsu.capstoneproject.core.adapter;
 
 public interface DayListenerObserver {
+
+    int ITEM_COUNT = 13;
+
     int TEXT_EDIT_FIELDS = 0;
 
-    int HOME_DELIVERY_CHECKBOX = 1;
-    int ANIMAL_FRIENDLY_CHECKBOX = 2;
-    int DISABLED_PEOPLE_FACILITIES_CHECKBOX = 3;
+    int HEADER_CHECK_ITEMS = 1;
+    int HOME_DELIVERY_CHECKBOX = 2;
+    int ANIMAL_FRIENDLY_CHECKBOX = 3;
+    int DISABLED_PEOPLE_FACILITIES_CHECKBOX = 4;
 
-    int SUNDAY = 4;
-    int MONDAY = 5;
-    int THURSDAY = 6;
-    int WEDNESDAY = 7;
-    int TUESDAY = 8;
-    int FRIDAY = 9;
-    int SATURDAY = 10;
+    int HEADER_WEEKDAY_TIMES = 5;
+    int SUNDAY = 6;
+    int MONDAY = 7;
+    int THURSDAY = 8;
+    int WEDNESDAY = 9;
+    int TUESDAY = 10;
+    int FRIDAY = 11;
+
+    int SATURDAY = 12;
 
     interface HolderObserver {
 

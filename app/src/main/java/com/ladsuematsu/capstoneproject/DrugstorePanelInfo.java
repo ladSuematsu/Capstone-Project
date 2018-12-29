@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.google.android.gms.location.places.Place;
 import com.ladsuematsu.capstoneproject.core.entity.PlaceEntry;
 import com.ladsuematsu.capstoneproject.newplace.activity.NewPlaceActivity;
+import com.ladsuematsu.capstoneproject.newplace.detail.PlaceDetailsActivity;
 import com.ladsuematsu.capstoneproject.newplace.mvp.NewPlaceMvp;
 
 public class DrugstorePanelInfo extends InfoPanelBottomSheetDialog {
@@ -20,7 +21,7 @@ public class DrugstorePanelInfo extends InfoPanelBottomSheetDialog {
     private final View.OnClickListener onDetailsClickCListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            Intent activityIntent = new Intent(getContext(), NewPlaceActivity.class)
+            Intent activityIntent = new Intent(getContext(), PlaceDetailsActivity.class)
                                             .putExtra(NewPlaceMvp.EXTRA_PLACE_KEY, place.getUid());
 
             startActivity(activityIntent);
