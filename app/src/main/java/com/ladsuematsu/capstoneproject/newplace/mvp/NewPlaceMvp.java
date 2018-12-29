@@ -12,6 +12,8 @@ public interface NewPlaceMvp {
         void refreshFields();
         void refreshFields(int position);
         void onEditWeek(int hourOfDay, int minutes);
+
+        void requestEdit(String key);
     }
 
     interface Model extends Mvp.Model<Model.Callback> {

@@ -101,15 +101,21 @@ public class NewPlacePresenter implements Mvp.Presenter<NewPlaceMvp.View>, DayLi
                 selectedPlaceAdapter.getAddress(),
                 selectedPlaceAdapter.getLatitude(),
                 selectedPlaceAdapter.getLongitude(),
-                serviceCheck.containsKey(HOME_DELIVERY_CHECKBOX) ? serviceCheck.get(HOME_DELIVERY_CHECKBOX) : false,
-                serviceCheck.containsKey(ANIMAL_FRIENDLY_CHECKBOX) ? serviceCheck.get(ANIMAL_FRIENDLY_CHECKBOX) : false,
-                serviceCheck.containsKey(DISABLED_PEOPLE_FACILITIES_CHECKBOX) ? serviceCheck.get(DISABLED_PEOPLE_FACILITIES_CHECKBOX) : false
+                serviceCheck.containsKey(DayListenerObserver.HOME_DELIVERY_CHECKBOX) ? serviceCheck.get(DayListenerObserver.HOME_DELIVERY_CHECKBOX) : false,
+                serviceCheck.containsKey(DayListenerObserver.ANIMAL_FRIENDLY_CHECKBOX) ? serviceCheck.get(DayListenerObserver.ANIMAL_FRIENDLY_CHECKBOX) : false,
+                serviceCheck.containsKey(DayListenerObserver.DISABLED_PEOPLE_FACILITIES_CHECKBOX) ? serviceCheck.get(DayListenerObserver.DISABLED_PEOPLE_FACILITIES_CHECKBOX) : false
         );
 
         placeEntry.setWeekTimes(openWeekdayHours);
 
         placeProvider.create(placeEntry);
         presenterHelper.getView().onPlaceSavedSuccess();
+    }
+
+    public void editPlace() {
+        if(!presenterHelper.isViewAttached()) { return; }
+
+        presenterHelper.getView().requestEdit(key);
     }
 
     @Override
@@ -173,17 +179,6 @@ public class NewPlacePresenter implements Mvp.Presenter<NewPlaceMvp.View>, DayLi
 
     @Override
     public void bindHolder(int itemPosition, DayListenerObserver.CheckableObserver observer) {
-        switch (itemPosition) {
-            case HOME_DELIVERY_CHECKBOX:
-
-                break;
-            case ANIMAL_FRIENDLY_CHECKBOX:
-
-                break;
-            case DISABLED_PEOPLE_FACILITIES_CHECKBOX:
-
-                break;
-        }
 
         observer.setCheckable(itemPosition, serviceCheck.containsKey(itemPosition) ? serviceCheck.get(itemPosition) : false);
 

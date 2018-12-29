@@ -39,5 +39,7 @@
     <string name="label_place_details">Details</string>
     <string name="place_detail_header_check_fields">Ammenities</string>
     <string name="place_detail_header_weekday_times_fields">Schedule</string>
+    <string name="action_edit_place_entry">edit</string>
+    <string name="action_edit_place_save">save</string>
 
 </resources>

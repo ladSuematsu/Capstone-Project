@@ -39,6 +39,9 @@ public class NewPlaceActivity extends AppCompatActivity  {
     private final NewPlaceMvp.View viewImplementation = new NewPlaceMvp.View() {
 
         @Override
+        public void requestEdit(String key) {}
+
+        @Override
         public void onPlaceSavedSuccess() {
             setResult(RESULT_OK);
             finish();
@@ -113,7 +116,7 @@ public class NewPlaceActivity extends AppCompatActivity  {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_edit_place, menu);
+        getMenuInflater().inflate(R.menu.menu_save_place, menu);
 
         return super.onCreateOptionsMenu(menu);
     }

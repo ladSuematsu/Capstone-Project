@@ -11,11 +11,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.ladsuematsu.capstoneproject.R;
+import com.ladsuematsu.capstoneproject.core.adapter.DayListenerObserver;
 import com.ladsuematsu.capstoneproject.core.adapter.PlaceDetailsAdapter;
 import com.ladsuematsu.capstoneproject.core.adapter.PlaceEditAdapter;
 import com.ladsuematsu.capstoneproject.core.data.adapter.PlacesAdapter;
+import com.ladsuematsu.capstoneproject.newplace.activity.NewPlaceActivity;
 import com.ladsuematsu.capstoneproject.newplace.mvp.NewPlaceMvp;
 import com.ladsuematsu.capstoneproject.newplace.mvp.presenter.NewPlacePresenter;
+import com.ladsuematsu.capstoneproject.overview.MapActivity;
 
 public class PlaceDetailsActivity extends AppCompatActivity  {
     private static final String LOG_TAG = PlaceDetailsActivity.class.getSimpleName();
@@ -25,6 +28,13 @@ public class PlaceDetailsActivity extends AppCompatActivity  {
     private final NewPlacePresenter newPlacePresenter = new NewPlacePresenter();
 
     private final NewPlaceMvp.View viewImplementation = new NewPlaceMvp.View() {
+
+        @Override
+        public void requestEdit(String key) {
+            Intent intent = new Intent(PlaceDetailsActivity.this, NewPlaceActivity.class)
+                                .putExtra(NewPlaceMvp.EXTRA_PLACE_KEY, key);
+            startActivity(intent);
+        }
 
         @Override
         public void onPlaceSavedSuccess() {
@@ -104,8 +114,8 @@ public class PlaceDetailsActivity extends AppCompatActivity  {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.action_edit_place_save) {
-            newPlacePresenter.savePlace();
+        if (item.getItemId() == R.id.action_edit_place_start) {
+            newPlacePresenter.editPlace();
 
             return true;
         }
