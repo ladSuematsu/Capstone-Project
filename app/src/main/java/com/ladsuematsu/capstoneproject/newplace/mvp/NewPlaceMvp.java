@@ -4,6 +4,8 @@ package com.ladsuematsu.capstoneproject.newplace.mvp;
 import com.ladsuematsu.capstoneproject.core.mvp.Mvp;
 
 public interface NewPlaceMvp {
+    String EXTRA_PLACE_KEY = "extra_place_key";
+
     interface View {
         void onPlaceSavedSuccess();
         void onSearchAddress();

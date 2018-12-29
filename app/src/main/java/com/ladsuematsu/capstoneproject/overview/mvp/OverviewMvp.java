@@ -12,6 +12,8 @@ public interface OverviewMvp {
         void addMarkerForCurrentLocation(double latitude, double longitude);
 
         void removeMarker(String placeKey);
+
+        void refreshMarker(String uid, double latitude, double longitude);
     }
 
     interface Model extends Mvp.Model<Model.Callback> {

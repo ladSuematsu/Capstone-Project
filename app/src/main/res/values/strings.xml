@@ -36,5 +36,6 @@
     <string name="amenity_disabled_people">Facilities for disabled people</string>
     <string name="amenity_door_delivery">Does door delivery</string>
     <string name="open_close_hour_weekday_format">%s - %s</string>
+    <string name="label_place_details">Details</string>
 
 </resources>

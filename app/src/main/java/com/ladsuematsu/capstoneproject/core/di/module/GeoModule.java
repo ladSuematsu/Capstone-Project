@@ -43,7 +43,7 @@ public class GeoModule {
                 placeDetailsReference.child(key).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        Log.d(TAG, "Recoverde detail data for place with key: " + dataSnapshot.getKey());
+                        Log.d(TAG, "Recovered detail data for place with key: " + dataSnapshot.getKey());
 
                         PlaceEntry placeEntry = dataSnapshot.getValue(PlaceEntry.class);
 

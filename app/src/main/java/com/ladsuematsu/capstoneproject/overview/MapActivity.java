@@ -159,6 +159,15 @@ public class MapActivity extends AppCompatActivity {
             markerMapping.put(key, marker);
         }
 
+        @Override
+        public void refreshMarker(String uid, double latitude, double longitude) {
+
+            if (markerMapping.containsKey(uid)) {
+                markerMapping.get(uid).setPosition(new LatLng(latitude, longitude));
+            } else {
+                addMarker(uid, latitude, longitude);
+            }
+        }
     };
 
     PlaceSelectionListener placeSelectionListener = new PlaceSelectionListener() {

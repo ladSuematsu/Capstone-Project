@@ -14,6 +14,7 @@ import com.ladsuematsu.capstoneproject.newplace.mvp.NewPlaceMvp;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 
 
@@ -21,6 +22,24 @@ public class NewPlacePresenter implements Mvp.Presenter<NewPlaceMvp.View>, DayLi
     private static final int IDLE_TIME_PICKER_CODE = 0;
     private static final int START_TIME_PICKER_CODE = 1;
     private static final int END_TIME_PICKER_CODE = 2;
+
+    private final DataProvider.ProviderListener<PlaceEntry> listener = new DataProvider.ProviderListener<PlaceEntry>() {
+        @Override
+        public void onSuccess(List<PlaceEntry> result) {
+            if (!presenterHelper.isViewAttached()) { return; }
+
+            PlaceEntry placeEntry = result.get(0);
+
+            loadPlaceEntry(placeEntry);
+
+            presenterHelper.getView().refreshFields();
+        }
+
+        @Override
+        public void onFailure() {
+
+        }
+    };
 
     private MvpPresenter<NewPlaceMvp.View> presenterHelper = new MvpPresenter<>();
     private DataProvider<PlaceEntry, String> placeProvider = AppComponent.getInstance().getPlaceRepository();
@@ -35,6 +54,7 @@ public class NewPlacePresenter implements Mvp.Presenter<NewPlaceMvp.View>, DayLi
     private int editItemPosition;
     private int pickerCode = IDLE_TIME_PICKER_CODE;
     private WeekTime weekDay;
+    private String key;
 
     public NewPlacePresenter() {
 
@@ -50,6 +70,18 @@ public class NewPlacePresenter implements Mvp.Presenter<NewPlaceMvp.View>, DayLi
         presenterHelper.detachView();
     }
 
+    public void setLoadParameters(String key) {
+        this.key = key;
+    }
+
+    public void load() {
+        if (this.key != null && !this.key.isEmpty()) {
+
+            placeProvider.fetch(this.key, listener);
+
+        }
+    }
+
     public void onSelectedPlace(ApiPlaceAdapter placeAdapter) {
         if(!presenterHelper.isViewAttached()) { return; }
 
@@ -63,7 +95,7 @@ public class NewPlacePresenter implements Mvp.Presenter<NewPlaceMvp.View>, DayLi
     public void savePlace() {
         if(!presenterHelper.isViewAttached()) { return; }
 
-        PlaceEntry placeEntry = new PlaceEntry(selectedPlaceAdapter.getId(),
+        PlaceEntry placeEntry = new PlaceEntry(key,
                 placeName,
                 placePhoneNumber,
                 selectedPlaceAdapter.getAddress(),
@@ -206,6 +238,46 @@ public class NewPlacePresenter implements Mvp.Presenter<NewPlaceMvp.View>, DayLi
         serviceCheck.put(checkCode, checked);
     }
 
+    private void loadPlaceEntry(final PlaceEntry placeEntry) {
+        placeName = placeEntry.getName();
+        placePhoneNumber = placeEntry.getPhoneNumber();
+        serviceCheck.put(DayListenerObserver.HOME_DELIVERY_CHECKBOX, placeEntry.getDoesDoorDelivery());
+        serviceCheck.put(DayListenerObserver.ANIMAL_FRIENDLY_CHECKBOX, placeEntry.getIsAnimalFriendly());
+        serviceCheck.put(DayListenerObserver.DISABLED_PEOPLE_FACILITIES_CHECKBOX, placeEntry.getHasFacilitiesForDisabledPeople());
+        selectedPlaceAdapter = new ApiPlaceAdapter() {
+            @Override
+            public String getId() {
+                return null;
+            }
+
+            @Override
+            public String getName() {
+                return null;
+            }
+
+            @Override
+            public String getPhoneNumber() {
+                return null;
+            }
+
+            @Override
+            public String getAddress() {
+                return placeEntry.getAddress();
+            }
+
+            @Override
+            public double getLatitude() {
+                return placeEntry.getLatitude();
+            }
+
+            @Override
+            public double getLongitude() {
+                return placeEntry.getLongitude();
+            }
+        };
+
+    }
+
     public void onTimeSet(int hourOfDay, int minute) {
         String time = String.format(Locale.ROOT, "%02d" + WeekTime.TIME_SEPARATOR + "%02d", hourOfDay, minute);
 
@@ -236,4 +308,5 @@ public class NewPlacePresenter implements Mvp.Presenter<NewPlaceMvp.View>, DayLi
         }
 
     }
+
 }

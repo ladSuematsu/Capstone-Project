@@ -44,10 +44,11 @@ public class PlaceModule implements DataProvider<PlaceEntry, String> {
 
 
     @Override
-    public void fetch(String searchKey, final ProviderListener<PlaceEntry> listener) {
+    public void fetch(final String searchKey, final ProviderListener<PlaceEntry> listener) {
         if (searchKey == null || searchKey.isEmpty()) { return; }
 
-        Query resultReference = placesReference.orderByChild("name").startAt(searchKey).limitToFirst(100);
+//        Query resultReference = placesReference.orderByChild("name").startAt(searchKey).limitToFirst(100);
+        Query resultReference = placesReference.child(searchKey);
 
         if (valueEventListener != null) {
             resultReference.removeEventListener(valueEventListener);
@@ -58,14 +59,19 @@ public class PlaceModule implements DataProvider<PlaceEntry, String> {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 List<PlaceEntry> placeEntries = new ArrayList<>();
 
-                for (DataSnapshot childDataSnapshot : dataSnapshot.getChildren()) {
 
-                    PlaceEntry placeEntry = childDataSnapshot.getValue(PlaceEntry.class);
+//                for (DataSnapshot childDataSnapshot : dataSnapshot.getChildren()) {
+//
+//                    PlaceEntry placeEntry = childDataSnapshot.getValue(PlaceEntry.class);
+//
+//
+//                    placeEntries.add(placeEntry);
+//
+//                }
 
+                PlaceEntry placeEntry = dataSnapshot.getValue(PlaceEntry.class);
+                placeEntries.add(placeEntry);
 
-                    placeEntries.add(placeEntry);
-
-                }
 
                 if (listener != null) {
                     listener.onSuccess(placeEntries);
@@ -87,9 +93,12 @@ public class PlaceModule implements DataProvider<PlaceEntry, String> {
     public void create(PlaceEntry entity) {
 
         // Write new Place entry
-        String key = placesReference.push().getKey();
+        String key = entity.getUid();
+        if (key == null || key.isEmpty()) {
+            key = placesReference.push().getKey();
+            entity.setUid(key);
+        }
 
-        entity.setUid(key);
         Map<String, Object> map = entity.toMap();
 
         Map<String, Object> updates = new HashMap<>();
@@ -101,7 +110,7 @@ public class PlaceModule implements DataProvider<PlaceEntry, String> {
         placesReference.updateChildren(updates);
 
 
-        // Writet week times
+        // Write week times
         DatabaseReference placeWeekTimeReference = weekTimeReference.child(key);
         List<WeekTime> weekTimes = entity.getWeekTimes();
         for (WeekTime weekTime : weekTimes) {

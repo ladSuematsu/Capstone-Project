@@ -74,6 +74,10 @@ public class NewPlaceActivity extends AppCompatActivity  {
         setContentView(R.layout.activity_add_new_place);
 
         setupViews();
+
+        Intent intent = getIntent();
+        String placeKey = intent.hasExtra(NewPlaceMvp.EXTRA_PLACE_KEY) ? intent.getStringExtra(NewPlaceMvp.EXTRA_PLACE_KEY) : "";
+        newPlacePresenter.setLoadParameters(placeKey);
     }
 
     @Override
@@ -87,6 +91,8 @@ public class NewPlaceActivity extends AppCompatActivity  {
             formFields.setAdapter(daysAdapter);
 
         }
+
+        newPlacePresenter.load();
     }
 
     @Override

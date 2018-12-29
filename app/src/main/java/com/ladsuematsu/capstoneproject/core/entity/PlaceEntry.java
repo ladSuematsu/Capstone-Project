@@ -109,6 +109,10 @@ public class PlaceEntry implements Parcelable {
         return address;
     }
 
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
     public double getLatitude() {
         return latitude;
     }
@@ -117,7 +121,17 @@ public class PlaceEntry implements Parcelable {
         return longitude;
     }
 
-    public void setUid(String uid) { this.uid = uid; }
+    public boolean getDoesDoorDelivery() {
+        return doesDoorDelivery;
+    }
+
+    public boolean getIsAnimalFriendly() {
+        return isAnimalFriendly;
+    }
+
+    public boolean getHasFacilitiesForDisabledPeople() {
+        return hasFacilitiesForDisabledPeople;
+    }
 
     @Exclude public void setWeekTimes(List<WeekTime> weekTimes) {
         this.weekTimes = weekTimes;
@@ -126,6 +140,8 @@ public class PlaceEntry implements Parcelable {
     @Exclude  public List<WeekTime> getWeekTimes() {
         return weekTimes;
     }
+
+    public void setUid(String uid) { this.uid = uid; }
 
     // [START post_to_map]
     @Exclude

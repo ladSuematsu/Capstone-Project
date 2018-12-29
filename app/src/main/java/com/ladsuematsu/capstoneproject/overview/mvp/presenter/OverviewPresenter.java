@@ -23,9 +23,15 @@ public class OverviewPresenter implements Mvp.Presenter<OverviewMvp.View>  {
 
         @Override
         public void onRefreshedPlace(PlaceEntry place) {
+            boolean previouslyMapped = placesMap.containsKey(place.getUid());
+
             placesMap.put(place.getUid(), place);
 
-            presenterHelper.getView().addMarker(place.getUid(), place.getLatitude(), place.getLongitude());
+            if (!previouslyMapped) {
+                presenterHelper.getView().addMarker(place.getUid(), place.getLatitude(), place.getLongitude());
+            } else {
+                presenterHelper.getView().refreshMarker(place.getUid(), place.getLatitude(), place.getLongitude());
+            }
         }
 
         @Override
@@ -37,7 +43,6 @@ public class OverviewPresenter implements Mvp.Presenter<OverviewMvp.View>  {
 
         @Override
         public void onPlaceMoved(String key, double latitude, double longitude) {
-
         }
     };
 
