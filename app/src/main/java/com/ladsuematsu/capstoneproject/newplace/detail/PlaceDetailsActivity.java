@@ -9,12 +9,16 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
+import com.ladsuematsu.capstoneproject.AuthWatcher;
 import com.ladsuematsu.capstoneproject.R;
 import com.ladsuematsu.capstoneproject.core.adapter.DayListenerObserver;
 import com.ladsuematsu.capstoneproject.core.adapter.PlaceDetailsAdapter;
 import com.ladsuematsu.capstoneproject.core.adapter.PlaceEditAdapter;
 import com.ladsuematsu.capstoneproject.core.data.adapter.PlacesAdapter;
+import com.ladsuematsu.capstoneproject.core.di.component.AppComponent;
+import com.ladsuematsu.capstoneproject.login.activity.LoginActivity;
 import com.ladsuematsu.capstoneproject.newplace.activity.NewPlaceActivity;
 import com.ladsuematsu.capstoneproject.newplace.mvp.NewPlaceMvp;
 import com.ladsuematsu.capstoneproject.newplace.mvp.presenter.NewPlacePresenter;
@@ -26,6 +30,37 @@ public class PlaceDetailsActivity extends AppCompatActivity  {
     private final static int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
 
     private final NewPlacePresenter newPlacePresenter = new NewPlacePresenter();
+
+    private AuthWatcher authWatcher;
+
+    private AuthWatcher.AuthListener authWatcherListener = new AuthWatcher.AuthListener() {
+        @Override
+        public void onValidated() {
+
+            if (editStartMenuItem == null) { return; }
+
+            editStartMenuItem.setVisible(true);
+
+        }
+
+        @Override
+        public void onInvalidated() {
+
+            if (editStartMenuItem == null) { return; }
+
+            editStartMenuItem.setVisible(false);
+
+        }
+
+        @Override
+        public void onRefreshInvalidated() {
+
+            if (editStartMenuItem == null) { return; }
+
+            editStartMenuItem.setVisible(false);
+
+        }
+    };
 
     private final NewPlaceMvp.View viewImplementation = new NewPlaceMvp.View() {
 
@@ -61,6 +96,7 @@ public class PlaceDetailsActivity extends AppCompatActivity  {
 
     private PlaceDetailsAdapter daysAdapter;
     private RecyclerView formFields;
+    private MenuItem editStartMenuItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +104,8 @@ public class PlaceDetailsActivity extends AppCompatActivity  {
         setContentView(R.layout.activity_add_new_place);
 
         setupViews();
+
+        authWatcher = AppComponent.getInstance().getAuthWatcher();
 
         Intent intent = getIntent();
         String placeKey = intent.hasExtra(NewPlaceMvp.EXTRA_PLACE_KEY) ? intent.getStringExtra(NewPlaceMvp.EXTRA_PLACE_KEY) : "";
@@ -77,6 +115,7 @@ public class PlaceDetailsActivity extends AppCompatActivity  {
     @Override
     protected void onStart() {
         super.onStart();
+        authWatcher.attach(authWatcherListener);
         newPlacePresenter.attachView(viewImplementation);
 
         if (daysAdapter == null || formFields.getAdapter() == null) {
@@ -98,18 +137,25 @@ public class PlaceDetailsActivity extends AppCompatActivity  {
         }
     }
 
-
     @Override
-    protected void onStop() {
-        super.onStop();
-        newPlacePresenter.detachView();
+    protected void onResume() {
+        super.onResume();
+
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_edit_place, menu);
+        editStartMenuItem = menu.findItem(R.id.action_edit_place_start);
 
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        authWatcher.refreshSession();
+
+        return super.onPrepareOptionsMenu(menu);
     }
 
     @Override
