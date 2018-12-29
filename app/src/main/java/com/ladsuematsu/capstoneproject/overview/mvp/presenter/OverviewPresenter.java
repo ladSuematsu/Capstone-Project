@@ -1,6 +1,5 @@
 package com.ladsuematsu.capstoneproject.overview.mvp.presenter;
 
-import com.google.android.gms.location.places.Places;
 import com.ladsuematsu.capstoneproject.core.entity.PlaceEntry;
 import com.ladsuematsu.capstoneproject.core.mvp.Mvp;
 import com.ladsuematsu.capstoneproject.core.mvp.presenter.MvpPresenter;

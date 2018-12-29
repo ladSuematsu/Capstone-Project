@@ -22,7 +22,7 @@ public class PlaceEntry implements Parcelable {
     private boolean isAnimalFriendly;
     private boolean hasFacilitiesForDisabledPeople;
 
-    @Exclude private List<WeekTime> weekTimes = new ArrayList<>();
+    @Exclude private HashMap<Integer, WeekTime> weekTimes = new HashMap<>();
 
     public PlaceEntry() { }
 
@@ -133,11 +133,15 @@ public class PlaceEntry implements Parcelable {
         return hasFacilitiesForDisabledPeople;
     }
 
-    @Exclude public void setWeekTimes(List<WeekTime> weekTimes) {
-        this.weekTimes = weekTimes;
+    @Exclude public void setWeekTimes(WeekTime weekTime) {
+        this.weekTimes.put(weekTime.getWeekDayCode(), weekTime);
     }
 
-    @Exclude  public List<WeekTime> getWeekTimes() {
+    @Exclude public void setWeekTimes(HashMap<Integer, WeekTime> weekTimes) {
+        this.weekTimes.putAll(weekTimes);
+    }
+
+    @Exclude  public HashMap<Integer, WeekTime> getWeekTimes() {
         return weekTimes;
     }
 

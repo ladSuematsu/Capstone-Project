@@ -12,7 +12,6 @@ public class WeekTime {
     @Exclude public static final int SATURDAY_CODE = 7;
     @Exclude public static final String TIME_SEPARATOR = ":";
 
-    private String uid;
     private int weekDayCode;
     private String startTime;
     private String endTime;
@@ -29,9 +28,6 @@ public class WeekTime {
         this.endTime = weekTime.getEndTime();
     }
 
-    public void setPlaceUid(String uid) {
-        this.uid = uid;
-    }
 
     public void setStartTime(String startTime) {
         this.startTime = startTime;
@@ -39,10 +35,6 @@ public class WeekTime {
 
     public void setEndTime(String endTime) {
         this.endTime = endTime;
-    }
-
-    public String getUid() {
-        return uid;
     }
 
     public int getWeekDayCode() {

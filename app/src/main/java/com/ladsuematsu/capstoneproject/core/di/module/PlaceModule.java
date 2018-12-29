@@ -57,8 +57,6 @@ public class PlaceModule implements DataProvider<PlaceEntry, String> {
         valueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                List<PlaceEntry> placeEntries = new ArrayList<>();
-
 
 //                for (DataSnapshot childDataSnapshot : dataSnapshot.getChildren()) {
 //
@@ -69,13 +67,38 @@ public class PlaceModule implements DataProvider<PlaceEntry, String> {
 //
 //                }
 
-                PlaceEntry placeEntry = dataSnapshot.getValue(PlaceEntry.class);
-                placeEntries.add(placeEntry);
+                final PlaceEntry placeEntry = dataSnapshot.getValue(PlaceEntry.class);
+
+                weekTimeReference.child(placeEntry.getUid())
+                            .addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    for (DataSnapshot childDataSnapshot : dataSnapshot.getChildren()) {
+
+                                        WeekTime weekTime = childDataSnapshot.getValue(WeekTime.class);
+
+                                        placeEntry.setWeekTimes(weekTime);
+
+                                    }
+
+                                    List<PlaceEntry> placeEntries = new ArrayList<>();
+                                    placeEntries.add(placeEntry);
+
+                                    if (listener != null) {
+                                        listener.onSuccess(placeEntries);
+                                    }
 
 
-                if (listener != null) {
-                    listener.onSuccess(placeEntries);
-                }
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+                                    Log.e(TAG, "Place search failed on week retrieval", databaseError.toException());
+                                }
+                            });
+
+
+
             }
 
             @Override
@@ -112,11 +135,8 @@ public class PlaceModule implements DataProvider<PlaceEntry, String> {
 
         // Write week times
         DatabaseReference placeWeekTimeReference = weekTimeReference.child(key);
-        List<WeekTime> weekTimes = entity.getWeekTimes();
-        for (WeekTime weekTime : weekTimes) {
-            DatabaseReference keyReference = placeWeekTimeReference.push();
-
-            weekTime.setPlaceUid(keyReference.getKey());
+        for (WeekTime weekTime : entity.getWeekTimes().values()) {
+            DatabaseReference keyReference = placeWeekTimeReference.child(String.valueOf(weekTime.getWeekDayCode()));
             keyReference.setValue(weekTime);
         }
 

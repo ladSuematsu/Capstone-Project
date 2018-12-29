@@ -106,7 +106,7 @@ public class NewPlacePresenter implements Mvp.Presenter<NewPlaceMvp.View>, DayLi
                 serviceCheck.containsKey(DISABLED_PEOPLE_FACILITIES_CHECKBOX) ? serviceCheck.get(DISABLED_PEOPLE_FACILITIES_CHECKBOX) : false
         );
 
-        placeEntry.setWeekTimes(new ArrayList<>(openWeekdayHours.values()));
+        placeEntry.setWeekTimes(openWeekdayHours);
 
         placeProvider.create(placeEntry);
         presenterHelper.getView().onPlaceSavedSuccess();
@@ -275,6 +275,8 @@ public class NewPlacePresenter implements Mvp.Presenter<NewPlaceMvp.View>, DayLi
                 return placeEntry.getLongitude();
             }
         };
+
+        openWeekdayHours.putAll(placeEntry.getWeekTimes());
 
     }
 
