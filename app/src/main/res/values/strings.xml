@@ -19,7 +19,7 @@
     <string name="error_signup_failure">Could not register new user</string>
     <string name="place_search_hint">Type in an address or location name</string>
     <string name="content_undefined">undefined</string>
-    <string name="day_closed">closed</string>
+    <string name="day_closed">CLOSED</string>
     <string name="label_edit">edit</string>
 
     <string name="label_sunday">Sunday</string>
