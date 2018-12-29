@@ -52,10 +52,12 @@ public class DrugstorePanelInfo extends InfoPanelBottomSheetDialog {
 
         TextView placeName = rootView.findViewById(R.id.name);
         TextView placeAddress = rootView.findViewById(R.id.address);
+        TextView phoneNumber = rootView.findViewById(R.id.telephone);
         TextView placeDetails = rootView.findViewById(R.id.place_details);
 
         placeName.setText(place.getName());
         placeAddress.setText(place.getAddress());
+        phoneNumber.setText(place.getPhoneNumber());
         placeDetails.setOnClickListener(onDetailsClickCListener);
 
     }
