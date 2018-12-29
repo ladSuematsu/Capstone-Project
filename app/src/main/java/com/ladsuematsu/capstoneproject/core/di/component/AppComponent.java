@@ -34,7 +34,7 @@ public class AppComponent {
     }
 
     public DataProvider<PlaceEntry, String> getPlaceRepository() {
-        if (placeModule == null || placeModule.get() != null) {
+        if (placeModule == null || placeModule.get() == null) {
             placeModule = new WeakReference<>(new PlaceModule());
         }
 
@@ -42,7 +42,7 @@ public class AppComponent {
     }
 
     public GeoModule getGeoRepository() {
-        if (geoModule == null || geoModule.get() != null) {
+        if (geoModule == null || geoModule.get() == null) {
             geoModule = new WeakReference<>(new GeoModule());
         }
 
