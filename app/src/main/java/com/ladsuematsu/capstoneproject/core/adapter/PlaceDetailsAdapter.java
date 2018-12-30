@@ -35,13 +35,18 @@ public class PlaceDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private final String labelFriday;
     private final String labelSaturday;
 
-    private final LayoutInflater inflater;
-    private final DayListenerObserver.HolderListener listener;
     private final String openCloseHourFormat;
-    private final Drawable checkedDrawable;
-    private final Drawable notCheckedDrawable;
+
     private final String labelHeaderCheckfields;
     private final String labelHeaderWeekdayTimes;
+    private final String checkboxContentDescriptionPositive;
+    private final String checkboxContentDescriptionNegative;
+
+    private final Drawable checkedDrawable;
+    private final Drawable notCheckedDrawable;
+
+    private final LayoutInflater inflater;
+    private final DayListenerObserver.HolderListener listener;
 
     public PlaceDetailsAdapter(LayoutInflater inflater, DayListenerObserver.HolderListener listener) {
         this.inflater = inflater;
@@ -67,6 +72,8 @@ public class PlaceDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
         checkedDrawable = ResourcesCompat.getDrawable(resources, R.drawable.ic_check_circle_black_24dp, null);
         notCheckedDrawable = ResourcesCompat.getDrawable(resources, R.drawable.ic_do_not_disturb_on_black_24dp, null);
+        checkboxContentDescriptionPositive = resources.getString(R.string.place_detail_read_only_checkbox_content_description_yes);
+        checkboxContentDescriptionNegative = resources.getString(R.string.place_detail_read_only_checkbox_content_description_no);
     }
 
     @Override
@@ -279,6 +286,7 @@ public class PlaceDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 CheckableHolder.this.code = code;
 
                 checkBox.setImageDrawable(checked ? checkedDrawable : notCheckedDrawable);
+                checkBox.setContentDescription(checked ? checkboxContentDescriptionPositive :  checkboxContentDescriptionNegative);
             }
         };
     }

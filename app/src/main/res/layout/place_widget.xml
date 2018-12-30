@@ -90,7 +90,6 @@
             android:layout_margin="8dp"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
-            android:contentDescription="@string/appwidget_empty_intruction"
             android:text="@string/appwidget_empty_intruction"
             android:textSize="24sp"
             android:textStyle="bold|italic" />
