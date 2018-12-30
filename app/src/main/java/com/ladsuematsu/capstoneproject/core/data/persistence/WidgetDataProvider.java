@@ -9,5 +9,5 @@ public interface WidgetDataProvider {
 
     String getLastPlacePhoneNumber();
 
-    void setLastPlaceUid(String uid, String name, String address, String phoneNumber);
+    void setLastPlaceEntry(String uid, String name, String address, String phoneNumber);
 }

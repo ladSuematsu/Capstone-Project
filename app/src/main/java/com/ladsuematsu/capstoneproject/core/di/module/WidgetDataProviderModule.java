@@ -41,7 +41,7 @@ public class WidgetDataProviderModule implements WidgetDataProvider {
     }
 
     @Override
-    public void setLastPlaceUid(String uid, String name, String address, String phoneNumber) {
+    public void setLastPlaceEntry(String uid, String name, String address, String phoneNumber) {
         sharedPreferences.edit()
                 .putString(LAST_PLACE_UID, uid)
                 .putString(LAST_PLACE_NAME, name)

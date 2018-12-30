@@ -47,7 +47,7 @@
 
         <activity
             android:name=".login.activity.LoginActivity"
-            android:label="@string/title_activity_login"></activity>
+            android:label="@string/title_activity_login" />
         <activity
             android:name=".MainActivity"
             android:label="@string/title_activity_main" />
@@ -85,7 +85,7 @@
                 android:resource="@xml/place_searchable" />
         </activity>
 
-        <receiver android:name=".PlaceWidget">
+        <receiver android:name=".widget.PlaceWidget">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
