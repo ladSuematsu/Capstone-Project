@@ -1,6 +1,10 @@
 package com.ladsuematsu.capstoneproject.core.di.component;
 
+import android.content.Context;
+
 import com.ladsuematsu.capstoneproject.AuthWatcher;
+import com.ladsuematsu.capstoneproject.core.data.persistence.WidgetDataProvider;
+import com.ladsuematsu.capstoneproject.core.di.module.WidgetDataProviderModule;
 import com.ladsuematsu.capstoneproject.core.data.persistence.DataProvider;
 import com.ladsuematsu.capstoneproject.core.di.module.AuthModule;
 import com.ladsuematsu.capstoneproject.core.di.module.FirebaseAuthWatcher;
@@ -12,16 +16,19 @@ import java.lang.ref.WeakReference;
 
 public class AppComponent {
     private static AppComponent appComponent;
+    private final Context applicationContext;
 
     private WeakReference<AuthModule> authModule;
     private WeakReference<PlaceModule> placeModule;
     private WeakReference<GeoModule> geoModule;
+    private WeakReference<WidgetDataProviderModule> appWidgetDataModule;
 
     public static AppComponent getInstance() {
         return appComponent;
     }
 
-    public AppComponent() {
+    public AppComponent(Context context) {
+        applicationContext = context;
         appComponent = this;
     }
 
@@ -53,4 +60,11 @@ public class AppComponent {
         return new FirebaseAuthWatcher();
     }
 
+    public WidgetDataProvider getAppWidgetDataModule() {
+        if (appWidgetDataModule == null || appWidgetDataModule.get() == null) {
+            appWidgetDataModule = new WeakReference<>(new WidgetDataProviderModule(applicationContext));
+        }
+
+        return appWidgetDataModule.get();
+    }
 }

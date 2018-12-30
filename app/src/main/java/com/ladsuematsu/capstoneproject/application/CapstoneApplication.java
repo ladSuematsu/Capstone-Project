@@ -10,6 +10,6 @@ public class CapstoneApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
-        new AppComponent();
+        new AppComponent(this);
     }
 }

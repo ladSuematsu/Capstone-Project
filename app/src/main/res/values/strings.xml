@@ -41,5 +41,10 @@
     <string name="place_detail_header_weekday_times_fields">Schedule</string>
     <string name="action_edit_place_entry">edit</string>
     <string name="action_edit_place_save">save</string>
+    <string name="appwidget_text">Select a place in the main app to see its description and address in this widget</string>
+    <string name="add_widget">Add widget</string>
+    <string name="appwidget_place_address">drugstore address</string>
+    <string name="appwidget_place_name">drugstrore name</string>
+    <string name="appwidget_place_phone_number">drugstrore phone number</string>
 
 </resources>
