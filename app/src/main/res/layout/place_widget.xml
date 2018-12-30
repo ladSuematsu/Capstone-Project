@@ -1,60 +1,115 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/appwidget_root_view"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#09C"
+    android:background="#c8ffffff"
     android:padding="@dimen/widget_margin">
 
-    <LinearLayout android:id="@+id/appwidget_place_info_container"
-        android:orientation="vertical"
-        android:layout_centerInParent="true"
-        android:visibility="gone"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <TextView
-            android:id="@+id/appwidget_place_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:contentDescription="@string/appwidget_place_name"
-            android:text="@string/appwidget_text"
-            android:textColor="#ffffff"
-            android:textSize="24sp"
-            android:textStyle="bold|italic" />
-
-        <TextView
-            android:id="@+id/appwidget_place_address"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:contentDescription="@string/appwidget_place_address"
-            android:textColor="#ffffff"
-            android:textSize="24sp"
-            android:textStyle="bold|italic" />
-
-        <TextView
-            android:id="@+id/appwidget_place_phone_number"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:contentDescription="@string/appwidget_place_phone_number"
-            android:textColor="#ffffff"
-            android:textSize="24sp"
-            android:textStyle="bold|italic" />
-    </LinearLayout>
-
     <TextView
-        android:id="@+id/appwidget_default_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
+        android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+        android:textStyle="bold"
+        android:textAllCaps="true"
+        android:text="@string/app_name"
+        android:layout_gravity="end"
         android:layout_margin="8dp"
-        android:contentDescription="@string/appwidget_text"
-        android:text="@string/appwidget_text"
-        android:textColor="#ffffff"
-        android:textSize="24sp"
-        android:textStyle="bold|italic" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
-</RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="8dp"
+        >
+
+        <LinearLayout android:id="@+id/appwidget_place_info_container"
+            android:orientation="vertical"
+            android:layout_centerInParent="true"
+            android:visibility="visible"
+            android:contentDescription="@string/appwidget_place_name"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:id="@+id/appwidget_place_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="@string/appwidget_text_undefined"
+                android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                />
+
+            <TextView
+                android:id="@+id/appwidget_address_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/appwidget_label_address"
+                android:contentDescription="@string/appwidget_place_address"
+                android:textAllCaps="true"
+                android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+                />
+
+
+            <TextView
+                android:id="@+id/appwidget_place_address"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:hint="@string/appwidget_text_undefined"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                />
+
+            <TextView
+                android:id="@+id/appwidget_phone_number_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:contentDescription="@string/appwidget_place_phone_number"
+                android:text="@string/appwidget_label_phone_number"
+                android:textAllCaps="true"
+                android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+                />
+
+
+            <TextView
+                android:id="@+id/appwidget_place_phone_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:hint="@string/appwidget_text_undefined"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                />
+
+        </LinearLayout>
+
+        <TextView android:visibility="gone"
+            android:id="@+id/appwidget_default_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_margin="8dp"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:contentDescription="@string/appwidget_empty_intruction"
+            android:text="@string/appwidget_empty_intruction"
+            android:textSize="24sp"
+            android:textStyle="bold|italic" />
+
+        <TextView
+            android:id="@+id/app_widget_label_instructions"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:drawableStart="@drawable/ic_info_outline_black_24dp"
+            android:layout_marginStart="8dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:text="@string/appwidget_interation_hint"
+            android:textAllCaps="true"
+            android:textStyle="bold"
+            android:hint="@string/appwidget_text_undefined"
+            android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+            />
+    </RelativeLayout>
+
+</LinearLayout>

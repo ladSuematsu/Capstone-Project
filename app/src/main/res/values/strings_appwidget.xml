@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="appwidget_empty_intruction">select a place in the main app to see its description and address in this widget</string>
+    <string name="appwidget_interation_hint">tap anywhere to open details</string>
+    <string name="appwidget_place_address">drugstore address</string>
+    <string name="appwidget_place_name">drugstrore name</string>
+    <string name="appwidget_place_phone_number">drugstrore phone number</string>
+    <string name="appwidget_text_undefined">undefined</string>
+    <string name="appwidget_label_address">Address</string>
+    <string name="appwidget_label_phone_number">Phone Number</string>
+</resources>
