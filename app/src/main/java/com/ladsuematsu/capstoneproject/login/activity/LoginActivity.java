@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.app.LoaderManager.LoaderCallbacks;
 
@@ -131,7 +132,16 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         presenter.detachView();
     }
 
+    @Override
+    public boolean onSupportNavigateUp() {
+        super.onBackPressed();
+        return true;
+    }
+
     private void setupViews() {
+        ActionBar navigationBar = getSupportActionBar();
+        navigationBar.setDisplayHomeAsUpEnabled(true);
+
         // Get root View
         rootView = findViewById(android.R.id.content);
 
