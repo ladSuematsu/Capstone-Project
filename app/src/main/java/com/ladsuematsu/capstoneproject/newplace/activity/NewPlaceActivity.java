@@ -142,6 +142,7 @@ public class NewPlaceActivity extends AppCompatActivity  {
     private void setupViews() {
         ActionBar navigationBar = getSupportActionBar();
         navigationBar.setDisplayHomeAsUpEnabled(true);
+        navigationBar.setTitle(R.string.title_activity_place_details_edit);
 
         formFields = findViewById(R.id.form_fields);
 

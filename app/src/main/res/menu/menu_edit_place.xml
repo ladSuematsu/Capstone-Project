@@ -5,6 +5,6 @@
     <item
         android:id="@+id/action_edit_place_start"
         android:icon="@drawable/ic_edit_white_24dp"
-        android:title="@string/action_edit_place_entry"
+        android:title="@string/place_edit_action_edit_start"
         app:showAsAction="always|withText" />
 </menu>
