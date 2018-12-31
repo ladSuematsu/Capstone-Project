@@ -3,7 +3,7 @@ package com.ladsuematsu.capstoneproject.core.di.module;
 import android.support.annotation.NonNull;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.ladsuematsu.capstoneproject.AuthWatcher;
+import com.ladsuematsu.capstoneproject.core.data.adapter.AuthWatcher;
 
 public class FirebaseAuthWatcher implements AuthWatcher {
 

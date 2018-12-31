@@ -1,4 +1,4 @@
-package com.ladsuematsu.capstoneproject;
+package com.ladsuematsu.capstoneproject.core.fragment;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -13,6 +13,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.ladsuematsu.capstoneproject.R;
 import com.ladsuematsu.capstoneproject.util.UiUtils;
 
 public abstract class InfoPanelBottomSheetDialog extends BottomSheetDialogFragment {

@@ -1,4 +1,4 @@
-package com.ladsuematsu.capstoneproject;
+package com.ladsuematsu.capstoneproject.core.data.adapter;
 
 public interface AuthWatcher {
 

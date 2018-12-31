@@ -15,7 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.ladsuematsu.capstoneproject.AuthWatcher;
+import com.ladsuematsu.capstoneproject.core.data.adapter.AuthWatcher;
 import com.ladsuematsu.capstoneproject.R;
 import com.ladsuematsu.capstoneproject.core.adapter.PlaceDetailsAdapter;
 import com.ladsuematsu.capstoneproject.core.data.adapter.PlacesAdapter;

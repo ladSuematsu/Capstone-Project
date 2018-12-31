@@ -2,7 +2,7 @@ package com.ladsuematsu.capstoneproject.core.di.component;
 
 import android.content.Context;
 
-import com.ladsuematsu.capstoneproject.AuthWatcher;
+import com.ladsuematsu.capstoneproject.core.data.adapter.AuthWatcher;
 import com.ladsuematsu.capstoneproject.core.data.persistence.WidgetDataProvider;
 import com.ladsuematsu.capstoneproject.core.di.module.WidgetDataProviderModule;
 import com.ladsuematsu.capstoneproject.core.data.persistence.DataProvider;

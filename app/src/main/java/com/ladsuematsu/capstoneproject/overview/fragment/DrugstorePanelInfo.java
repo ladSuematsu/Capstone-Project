@@ -1,4 +1,4 @@
-package com.ladsuematsu.capstoneproject;
+package com.ladsuematsu.capstoneproject.overview.fragment;
 
 import android.content.Context;
 import android.content.Intent;
@@ -10,11 +10,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.google.android.gms.location.places.Place;
-import com.ladsuematsu.capstoneproject.core.data.persistence.WidgetDataProvider;
-import com.ladsuematsu.capstoneproject.core.di.component.AppComponent;
+import com.ladsuematsu.capstoneproject.core.fragment.InfoPanelBottomSheetDialog;
+import com.ladsuematsu.capstoneproject.R;
 import com.ladsuematsu.capstoneproject.core.entity.PlaceEntry;
-import com.ladsuematsu.capstoneproject.newplace.activity.NewPlaceActivity;
 import com.ladsuematsu.capstoneproject.newplace.detail.PlaceDetailsActivity;
 import com.ladsuematsu.capstoneproject.newplace.mvp.NewPlaceMvp;
 import com.ladsuematsu.capstoneproject.widget.PlaceWidgetUpdateReceiver;
