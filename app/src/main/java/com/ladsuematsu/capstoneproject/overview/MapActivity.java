@@ -1,8 +1,5 @@
 package com.ladsuematsu.capstoneproject.overview;
 
-import android.app.SearchManager;
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -13,7 +10,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.SearchView;
 
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
@@ -36,7 +32,6 @@ import com.ladsuematsu.capstoneproject.newplace.activity.NewPlaceActivity;
 import com.ladsuematsu.capstoneproject.overview.mvp.OverviewMvp;
 import com.ladsuematsu.capstoneproject.overview.mvp.model.OverviewModel;
 import com.ladsuematsu.capstoneproject.overview.mvp.presenter.OverviewPresenter;
-import com.ladsuematsu.capstoneproject.search.PlaceSearchActivity;
 import com.ladsuematsu.capstoneproject.util.SystemSettingsUtils;
 import com.ladsuematsu.capstoneproject.util.UiUtils;
 
@@ -52,12 +47,10 @@ public class MapActivity extends AppCompatActivity implements PermissionCheckerH
     private OverviewPresenter presenter;
     private SupportMapFragment mapFragment;
     private GoogleMap map;
-    private SearchView searchView;
     private final HashMap<String, Marker> markerMapping = new HashMap<>();
     private ImageButton logoutButton;
     private FloatingActionButton addPlaceFab;
     private FloatingActionButton loginFab;
-    private boolean permissionsGranted;
 
     private AuthWatcher.AuthListener authWatcherListener = new AuthWatcher.AuthListener() {
         @Override
@@ -290,26 +283,5 @@ public class MapActivity extends AppCompatActivity implements PermissionCheckerH
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(onMapReadyCallback);
 
-        searchView = findViewById(R.id.search_bar);
-        searchView.setIconifiedByDefault(false);
-        searchView.setFocusable(false);
-
-        searchView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ((SearchView) v).setIconified(false);
-                startActivity(new Intent(MapActivity.this, PlaceSearchActivity.class));
-            }
-        });
-        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
-            @Override
-            public boolean onClose() {
-                return false;
-            }
-        });
-
-        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        ComponentName componentName = new ComponentName(getApplicationContext(), PlaceSearchActivity.class);
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(componentName));
     }
 }
