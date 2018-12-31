@@ -34,5 +34,6 @@
     <string name="overview_content_description_logout">logout user</string>
     <string name="overview_content_description_login">go to login session</string>
     <string name="overview_content_description_add_new_drugstore">add new drugstore</string>
+    <string name="error_no_network">No internet, check your connection</string>
 
 </resources>

@@ -26,6 +26,7 @@ import com.ladsuematsu.capstoneproject.R;
 import com.ladsuematsu.capstoneproject.core.di.component.AppComponent;
 import com.ladsuematsu.capstoneproject.core.entity.PlaceEntry;
 import com.ladsuematsu.capstoneproject.core.fragment.LocationPermissionCheckerHeadlessFragment;
+import com.ladsuematsu.capstoneproject.core.fragment.NetworkCheckerHeadlessFragment;
 import com.ladsuematsu.capstoneproject.core.fragment.PermissionCheckerHeadlessFragment;
 import com.ladsuematsu.capstoneproject.login.activity.LoginActivity;
 import com.ladsuematsu.capstoneproject.newplace.activity.NewPlaceActivity;
@@ -37,12 +38,13 @@ import com.ladsuematsu.capstoneproject.util.UiUtils;
 
 import java.util.HashMap;
 
-public class MapActivity extends AppCompatActivity implements PermissionCheckerHeadlessFragment.PermissionCheckerCallback {
+public class MapActivity extends AppCompatActivity implements PermissionCheckerHeadlessFragment.PermissionCheckerCallback, NetworkCheckerHeadlessFragment.NetworkCheckerCallback {
 
     private static final float DEFAULT_MAP_ZOOM = 15.0F;
     private static final String DETAIL_PANEL_TAG = "detail_panel_tag";
 
     private PermissionCheckerHeadlessFragment locationPermissionChecker;
+    private NetworkCheckerHeadlessFragment networkChecker;
     private AuthWatcher authWatcher;
     private OverviewPresenter presenter;
     private SupportMapFragment mapFragment;
@@ -229,6 +231,15 @@ public class MapActivity extends AppCompatActivity implements PermissionCheckerH
                     .commit();
         }
 
+        networkChecker = (NetworkCheckerHeadlessFragment) fragmentManager.findFragmentByTag(NetworkCheckerHeadlessFragment.DEFAULT_TAG);
+        if (networkChecker == null) {
+            networkChecker = NetworkCheckerHeadlessFragment.getInstance();
+
+            fragmentManager.beginTransaction()
+                    .add(networkChecker, NetworkCheckerHeadlessFragment.DEFAULT_TAG)
+                    .commit();
+        }
+
     }
 
     boolean postResume = false;
@@ -237,7 +248,7 @@ public class MapActivity extends AppCompatActivity implements PermissionCheckerH
     protected void onResume() {
         super.onResume();
 
-        authWatcher.refreshSession();
+        networkChecker.checkNetworkStatus();
         locationPermissionChecker.checkPermissions();
 
     }
@@ -250,6 +261,16 @@ public class MapActivity extends AppCompatActivity implements PermissionCheckerH
         presenter.detachView();
 
         super.onStop();
+    }
+
+    @Override
+    public void onNetworkActive() {
+        authWatcher.refreshSession();
+    }
+
+    @Override
+    public void onNoNetwork() {
+        UiUtils.showSnackbar(addPlaceFab, getString(R.string.error_no_network), null, Snackbar.LENGTH_LONG, null);
     }
 
     @Override

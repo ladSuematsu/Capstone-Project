@@ -2,7 +2,9 @@ package com.ladsuematsu.capstoneproject.login.activity;
 
 import android.annotation.TargetApi;
 import android.content.Intent;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 
@@ -17,6 +19,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.ladsuematsu.capstoneproject.core.fragment.NetworkCheckerHeadlessFragment;
 import com.ladsuematsu.capstoneproject.overview.MapActivity;
 import com.ladsuematsu.capstoneproject.R;
 import com.ladsuematsu.capstoneproject.login.mvp.LoginMvp;
@@ -24,14 +27,15 @@ import com.ladsuematsu.capstoneproject.login.mvp.model.LoginModel;
 import com.ladsuematsu.capstoneproject.login.mvp.presenter.LoginPresenter;
 import com.ladsuematsu.capstoneproject.util.UiUtils;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity implements NetworkCheckerHeadlessFragment.NetworkCheckerCallback {
 
-    private View rootView;
+    private CoordinatorLayout rootView;
     private AutoCompleteTextView mEmailView;
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
 
+    private NetworkCheckerHeadlessFragment networkChecker;
     private LoginPresenter presenter;
 
     private LoginMvp.View mvpView = new LoginMvp.View() {
@@ -87,13 +91,23 @@ public class LoginActivity extends AppCompatActivity {
         super.onStart();
 
         presenter.attachView(mvpView);
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        networkChecker = (NetworkCheckerHeadlessFragment) fragmentManager.findFragmentByTag(NetworkCheckerHeadlessFragment.DEFAULT_TAG);
+        if (networkChecker == null) {
+            networkChecker = NetworkCheckerHeadlessFragment.getInstance();
+
+            fragmentManager.beginTransaction()
+                    .add(networkChecker, NetworkCheckerHeadlessFragment.DEFAULT_TAG)
+                    .commit();
+        }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
 
-        presenter.refreshSession();
+        networkChecker.checkNetworkStatus();
     }
 
     @Override
@@ -111,12 +125,20 @@ public class LoginActivity extends AppCompatActivity {
         return true;
     }
 
+    @Override
+    public void onNetworkActive() { presenter.refreshSession(); }
+
+    @Override
+    public void onNoNetwork() {
+        UiUtils.showSnackbar(rootView, getString(R.string.error_no_network), null, Snackbar.LENGTH_LONG, null);
+    }
+
     private void setupViews() {
         ActionBar navigationBar = getSupportActionBar();
         navigationBar.setDisplayHomeAsUpEnabled(true);
 
         // Get root View
-        rootView = findViewById(android.R.id.content);
+        rootView = findViewById(R.id.root_view);
 
         // Set up the login form.
         mEmailView = findViewById(R.id.email);

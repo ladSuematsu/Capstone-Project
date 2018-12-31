@@ -3,6 +3,9 @@ package com.ladsuematsu.capstoneproject.newplace.detail;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
@@ -14,18 +17,16 @@ import android.view.View;
 
 import com.ladsuematsu.capstoneproject.AuthWatcher;
 import com.ladsuematsu.capstoneproject.R;
-import com.ladsuematsu.capstoneproject.core.adapter.DayListenerObserver;
 import com.ladsuematsu.capstoneproject.core.adapter.PlaceDetailsAdapter;
-import com.ladsuematsu.capstoneproject.core.adapter.PlaceEditAdapter;
 import com.ladsuematsu.capstoneproject.core.data.adapter.PlacesAdapter;
 import com.ladsuematsu.capstoneproject.core.di.component.AppComponent;
-import com.ladsuematsu.capstoneproject.login.activity.LoginActivity;
+import com.ladsuematsu.capstoneproject.core.fragment.NetworkCheckerHeadlessFragment;
 import com.ladsuematsu.capstoneproject.newplace.activity.NewPlaceActivity;
 import com.ladsuematsu.capstoneproject.newplace.mvp.NewPlaceMvp;
 import com.ladsuematsu.capstoneproject.newplace.mvp.presenter.NewPlacePresenter;
-import com.ladsuematsu.capstoneproject.overview.MapActivity;
+import com.ladsuematsu.capstoneproject.util.UiUtils;
 
-public class PlaceDetailsActivity extends AppCompatActivity  {
+public class PlaceDetailsActivity extends AppCompatActivity implements NetworkCheckerHeadlessFragment.NetworkCheckerCallback {
     private static final String LOG_TAG = PlaceDetailsActivity.class.getSimpleName();
 
     private final static int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
@@ -38,9 +39,7 @@ public class PlaceDetailsActivity extends AppCompatActivity  {
         @Override
         public void onValidated() {
 
-            if (editStartMenuItem == null) { return; }
-
-            editStartMenuItem.setVisible(true);
+            newPlacePresenter.load();
 
         }
 
@@ -83,11 +82,15 @@ public class PlaceDetailsActivity extends AppCompatActivity  {
 
         @Override
         public void refreshFields() {
+            formFields.setVisibility(View.VISIBLE);
+            editStartMenuItem.setVisible(true);
             daysAdapter.notifyDataSetChanged();
         }
 
         @Override
         public void refreshFields(int position) {
+            formFields.setVisibility(View.VISIBLE);
+            editStartMenuItem.setVisible(true);
             daysAdapter.notifyItemChanged(position);
         }
 
@@ -95,9 +98,11 @@ public class PlaceDetailsActivity extends AppCompatActivity  {
         public void onEditWeek(int hourOfDay, int minutes) {}
     };
 
+    private CoordinatorLayout rootView;
     private PlaceDetailsAdapter daysAdapter;
     private RecyclerView formFields;
     private MenuItem editStartMenuItem;
+    private NetworkCheckerHeadlessFragment networkChecker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,7 +131,6 @@ public class PlaceDetailsActivity extends AppCompatActivity  {
 
         }
 
-        newPlacePresenter.load();
     }
 
     @Override
@@ -154,7 +158,15 @@ public class PlaceDetailsActivity extends AppCompatActivity  {
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        authWatcher.refreshSession();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        networkChecker = (NetworkCheckerHeadlessFragment) fragmentManager.findFragmentByTag(NetworkCheckerHeadlessFragment.DEFAULT_TAG);
+        if (networkChecker == null) {
+            networkChecker = NetworkCheckerHeadlessFragment.getInstance();
+
+            fragmentManager.beginTransaction()
+                    .add(networkChecker, NetworkCheckerHeadlessFragment.DEFAULT_TAG)
+                    .commit();
+        }
 
         return super.onPrepareOptionsMenu(menu);
     }
@@ -176,7 +188,22 @@ public class PlaceDetailsActivity extends AppCompatActivity  {
         return true;
     }
 
+    @Override
+    public void onNetworkActive() {
+
+        authWatcher.refreshSession();
+
+    }
+
+    @Override
+    public void onNoNetwork() {
+        UiUtils.showSnackbar(rootView, getString(R.string.error_no_network), null, Snackbar.LENGTH_LONG, null);
+        formFields.setVisibility(View.INVISIBLE);
+        editStartMenuItem.setVisible(false);
+    }
+
     private void setupViews() {
+        rootView = findViewById(R.id.root_view);
         ActionBar navigationBar = getSupportActionBar();
         navigationBar.setDisplayHomeAsUpEnabled(true);
         navigationBar.setTitle(R.string.title_activity_place_details);

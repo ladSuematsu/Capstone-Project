@@ -4,6 +4,8 @@ import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
@@ -12,6 +14,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TimePicker;
 
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
@@ -20,22 +23,25 @@ import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.ladsuematsu.capstoneproject.R;
 import com.ladsuematsu.capstoneproject.core.adapter.PlaceEditAdapter;
 import com.ladsuematsu.capstoneproject.core.data.adapter.PlacesAdapter;
+import com.ladsuematsu.capstoneproject.core.fragment.NetworkCheckerHeadlessFragment;
 import com.ladsuematsu.capstoneproject.newplace.mvp.NewPlaceMvp;
 import com.ladsuematsu.capstoneproject.newplace.mvp.presenter.NewPlacePresenter;
+import com.ladsuematsu.capstoneproject.util.UiUtils;
 
-public class NewPlaceActivity extends AppCompatActivity  {
+public class NewPlaceActivity extends AppCompatActivity implements NetworkCheckerHeadlessFragment.NetworkCheckerCallback {
     private static final String LOG_TAG = NewPlaceActivity.class.getSimpleName();
 
     private final static int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
 
+    private NetworkCheckerHeadlessFragment networkChecker;
     private final NewPlacePresenter newPlacePresenter = new NewPlacePresenter();
+
     private final TimePickerDialog.OnTimeSetListener timePickerListener = new TimePickerDialog.OnTimeSetListener() {
         @Override
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
             newPlacePresenter.onTimeSet(hourOfDay, minute);
         }
     };
-
 
     private final NewPlaceMvp.View viewImplementation = new NewPlaceMvp.View() {
 
@@ -55,6 +61,8 @@ public class NewPlaceActivity extends AppCompatActivity  {
 
         @Override
         public void refreshFields() {
+            formFields.setVisibility(View.VISIBLE);
+            editSaveMenuItem.setVisible(true);
             daysAdapter.notifyDataSetChanged();
         }
 
@@ -71,6 +79,7 @@ public class NewPlaceActivity extends AppCompatActivity  {
 
     private PlaceEditAdapter daysAdapter;
     private RecyclerView formFields;
+    private MenuItem editSaveMenuItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,8 +127,24 @@ public class NewPlaceActivity extends AppCompatActivity  {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_save_place, menu);
+        editSaveMenuItem = menu.findItem(R.id.action_edit_place_save);
 
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        networkChecker = (NetworkCheckerHeadlessFragment) fragmentManager.findFragmentByTag(NetworkCheckerHeadlessFragment.DEFAULT_TAG);
+        if (networkChecker == null) {
+            networkChecker = NetworkCheckerHeadlessFragment.getInstance();
+
+            fragmentManager.beginTransaction()
+                    .add(networkChecker, NetworkCheckerHeadlessFragment.DEFAULT_TAG)
+                    .commit();
+        }
+
+        return true;
     }
 
     @Override
@@ -137,6 +162,19 @@ public class NewPlaceActivity extends AppCompatActivity  {
     public boolean onSupportNavigateUp() {
         super.onBackPressed();
         return true;
+    }
+
+    @Override
+    public void onNetworkActive() {
+        if (!editSaveMenuItem.isVisible()) {
+            newPlacePresenter.load();
+        }
+    }
+
+    @Override
+    public void onNoNetwork() {
+        formFields.setVisibility(View.INVISIBLE);
+        editSaveMenuItem.setVisible(false);
     }
 
     private void setupViews() {
