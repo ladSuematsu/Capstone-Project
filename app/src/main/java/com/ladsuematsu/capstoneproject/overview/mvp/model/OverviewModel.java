@@ -171,8 +171,6 @@ public class OverviewModel implements OverviewMvp.Model {
                     final Location location = locationResult.getLastLocation();
                     locationListener.onLocationResult(new DefaultLocationInfo(location));
                 }
-
-                super.onLocationResult(locationResult);
             }
         };
 

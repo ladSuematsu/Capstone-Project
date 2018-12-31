@@ -29,4 +29,7 @@
     <string name="place_detail_header_check_fields">Ammenities</string>
     <string name="place_detail_header_weekday_times_fields">Schedule</string>
 
+    <string name="error_must_enable_location_permissions">The app must have Location permissions enabled in order to function</string>
+    <string name="open_app_settings">open settings</string>
+
 </resources>

@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -27,20 +29,25 @@ import com.ladsuematsu.capstoneproject.DrugstorePanelInfo;
 import com.ladsuematsu.capstoneproject.R;
 import com.ladsuematsu.capstoneproject.core.di.component.AppComponent;
 import com.ladsuematsu.capstoneproject.core.entity.PlaceEntry;
+import com.ladsuematsu.capstoneproject.core.fragment.LocationPermissionCheckerHeadlessFragment;
+import com.ladsuematsu.capstoneproject.core.fragment.PermissionCheckerHeadlessFragment;
 import com.ladsuematsu.capstoneproject.login.activity.LoginActivity;
 import com.ladsuematsu.capstoneproject.newplace.activity.NewPlaceActivity;
 import com.ladsuematsu.capstoneproject.overview.mvp.OverviewMvp;
 import com.ladsuematsu.capstoneproject.overview.mvp.model.OverviewModel;
 import com.ladsuematsu.capstoneproject.overview.mvp.presenter.OverviewPresenter;
 import com.ladsuematsu.capstoneproject.search.PlaceSearchActivity;
+import com.ladsuematsu.capstoneproject.util.SystemSettingsUtils;
+import com.ladsuematsu.capstoneproject.util.UiUtils;
 
 import java.util.HashMap;
 
-public class MapActivity extends AppCompatActivity {
+public class MapActivity extends AppCompatActivity implements PermissionCheckerHeadlessFragment.PermissionCheckerCallback {
 
     private static final float DEFAULT_MAP_ZOOM = 15.0F;
     private static final String DETAIL_PANEL_TAG = "detail_panel_tag";
 
+    private PermissionCheckerHeadlessFragment locationPermissionChecker;
     private AuthWatcher authWatcher;
     private OverviewPresenter presenter;
     private SupportMapFragment mapFragment;
@@ -50,6 +57,7 @@ public class MapActivity extends AppCompatActivity {
     private ImageButton logoutButton;
     private FloatingActionButton addPlaceFab;
     private FloatingActionButton loginFab;
+    private boolean permissionsGranted;
 
     private AuthWatcher.AuthListener authWatcherListener = new AuthWatcher.AuthListener() {
         @Override
@@ -129,6 +137,7 @@ public class MapActivity extends AppCompatActivity {
         addMarkerForCurrentLocation(double latitude, double longitude) {
             LatLng coordinates = new LatLng(latitude, longitude);
             map.moveCamera(CameraUpdateFactory.newLatLngZoom(coordinates, DEFAULT_MAP_ZOOM));
+
             map.setMyLocationEnabled(true);
         }
 
@@ -215,21 +224,52 @@ public class MapActivity extends AppCompatActivity {
 
         authWatcher.attach(authWatcherListener);
         presenter.attachView(observer);
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+
+        locationPermissionChecker = (PermissionCheckerHeadlessFragment) fragmentManager.findFragmentByTag(LocationPermissionCheckerHeadlessFragment.DEFAULT_TAG);
+        if (locationPermissionChecker == null) {
+            locationPermissionChecker = LocationPermissionCheckerHeadlessFragment.getInstance();
+
+            fragmentManager.beginTransaction()
+                    .add(locationPermissionChecker, LocationPermissionCheckerHeadlessFragment.DEFAULT_TAG)
+                    .commit();
+        }
+
     }
+
+    boolean postResume = false;
 
     @Override
     protected void onResume() {
         super.onResume();
 
         authWatcher.refreshSession();
+        locationPermissionChecker.checkPermissions();
+
     }
 
     @Override
     protected void onStop() {
+        postResume = false;
+
         authWatcher.detach();
         presenter.detachView();
 
         super.onStop();
+    }
+
+    @Override
+    public void onLocationPermissionGranted() { presenter.requestPlacesInVicinity(); }
+
+    @Override
+    public void onLocationPermissionDenied() {
+        UiUtils.showSnackbar(addPlaceFab, getString(R.string.error_must_enable_location_permissions), getString(R.string.open_app_settings), Snackbar.LENGTH_INDEFINITE, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SystemSettingsUtils.openAppSettingDetails(MapActivity.this);
+            }
+        });
     }
 
     private void setupViews() {
@@ -272,5 +312,4 @@ public class MapActivity extends AppCompatActivity {
         ComponentName componentName = new ComponentName(getApplicationContext(), PlaceSearchActivity.class);
         searchView.setSearchableInfo(searchManager.getSearchableInfo(componentName));
     }
-
 }
