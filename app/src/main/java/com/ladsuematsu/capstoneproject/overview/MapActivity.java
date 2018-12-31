@@ -6,9 +6,9 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 
 import com.google.android.gms.common.api.Status;
@@ -53,6 +53,7 @@ public class MapActivity extends AppCompatActivity implements PermissionCheckerH
     private ImageButton logoutButton;
     private FloatingActionButton addPlaceFab;
     private FloatingActionButton loginFab;
+    private FrameLayout progress;
 
     private AuthWatcher.AuthListener authWatcherListener = new AuthWatcher.AuthListener() {
         @Override
@@ -127,6 +128,11 @@ public class MapActivity extends AppCompatActivity implements PermissionCheckerH
     };
 
     private OverviewMvp.View observer = new OverviewMvp.View() {
+        @Override
+        public void showProgress(boolean show) {
+            progress.setVisibility(show ? View.VISIBLE : View.GONE);
+        }
+
         @Override
         public void
         addMarkerForCurrentLocation(double latitude, double longitude) {
@@ -288,8 +294,8 @@ public class MapActivity extends AppCompatActivity implements PermissionCheckerH
 
     private void setupViews() {
         setContentView(R.layout.activity_map);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+
+        progress = findViewById(R.id.progress);
 
         logoutButton = findViewById(R.id.log_out);
         logoutButton.setOnClickListener(logoutClick);

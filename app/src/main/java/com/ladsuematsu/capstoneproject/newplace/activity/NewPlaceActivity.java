@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TimePicker;
 
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
@@ -49,6 +50,11 @@ public class NewPlaceActivity extends AppCompatActivity implements NetworkChecke
         public void requestEdit(String key) {}
 
         @Override
+        public void showProgress(boolean show) {
+            progress.setVisibility(show ? View.VISIBLE : View.GONE);
+        }
+
+        @Override
         public void onPlaceSavedSuccess() {
             setResult(RESULT_OK);
             finish();
@@ -80,6 +86,7 @@ public class NewPlaceActivity extends AppCompatActivity implements NetworkChecke
     private PlaceEditAdapter daysAdapter;
     private RecyclerView formFields;
     private MenuItem editSaveMenuItem;
+    private ProgressBar progress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -181,6 +188,8 @@ public class NewPlaceActivity extends AppCompatActivity implements NetworkChecke
         ActionBar navigationBar = getSupportActionBar();
         navigationBar.setDisplayHomeAsUpEnabled(true);
         navigationBar.setTitle(R.string.title_activity_place_details_edit);
+
+        progress = findViewById(R.id.progress);
 
         formFields = findViewById(R.id.form_fields);
 

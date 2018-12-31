@@ -17,11 +17,13 @@ public class OverviewPresenter implements Mvp.Presenter<OverviewMvp.View>  {
     private OverviewMvp.Model.Callback modelListener = new OverviewMvp.Model.Callback() {
         @Override
         public void onCurrentLocation(double latitude, double longitude) {
+            presenterHelper.getView().showProgress(false);
             presenterHelper.getView().addMarkerForCurrentLocation(latitude, longitude);
         }
 
         @Override
         public void onRefreshedPlace(PlaceEntry place) {
+
             boolean previouslyMapped = placesMap.containsKey(place.getUid());
 
             placesMap.put(place.getUid(), place);
@@ -62,6 +64,7 @@ public class OverviewPresenter implements Mvp.Presenter<OverviewMvp.View>  {
     }
 
     public void requestPlacesInVicinity() {
+        presenterHelper.getView().showProgress(true);
         model.refreshPlaces();
     }
 

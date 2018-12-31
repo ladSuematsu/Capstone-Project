@@ -78,6 +78,11 @@ public class PlaceDetailsActivity extends AppCompatActivity implements NetworkCh
         }
 
         @Override
+        public void showProgress(boolean show) {
+            progress.setVisibility(show ? View.VISIBLE : View.GONE);
+        }
+
+        @Override
         public void onSearchAddress() {}
 
         @Override
@@ -103,6 +108,7 @@ public class PlaceDetailsActivity extends AppCompatActivity implements NetworkCh
     private RecyclerView formFields;
     private MenuItem editStartMenuItem;
     private NetworkCheckerHeadlessFragment networkChecker;
+    private View progress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -207,6 +213,8 @@ public class PlaceDetailsActivity extends AppCompatActivity implements NetworkCh
         ActionBar navigationBar = getSupportActionBar();
         navigationBar.setDisplayHomeAsUpEnabled(true);
         navigationBar.setTitle(R.string.title_activity_place_details);
+
+        progress = findViewById(R.id.progress);
 
         formFields = findViewById(R.id.form_fields);
 

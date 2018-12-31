@@ -58,15 +58,6 @@ public class PlaceModule implements DataProvider<PlaceEntry, String> {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-//                for (DataSnapshot childDataSnapshot : dataSnapshot.getChildren()) {
-//
-//                    PlaceEntry placeEntry = childDataSnapshot.getValue(PlaceEntry.class);
-//
-//
-//                    placeEntries.add(placeEntry);
-//
-//                }
-
                 final PlaceEntry placeEntry = dataSnapshot.getValue(PlaceEntry.class);
 
                 weekTimeReference.child(placeEntry.getUid())

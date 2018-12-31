@@ -32,6 +32,7 @@ public class NewPlacePresenter implements Mvp.Presenter<NewPlaceMvp.View>, DayLi
 
             loadPlaceEntry(placeEntry);
 
+            presenterHelper.getView().showProgress(false);
             presenterHelper.getView().refreshFields();
         }
 
@@ -75,8 +76,10 @@ public class NewPlacePresenter implements Mvp.Presenter<NewPlaceMvp.View>, DayLi
     }
 
     public void load() {
-        if (this.key != null && !this.key.isEmpty()) {
+        if (!presenterHelper.isViewAttached()) { return; }
 
+        if (this.key != null && !this.key.isEmpty()) {
+            presenterHelper.getView().showProgress(true);
             placeProvider.fetch(this.key, listener);
 
         }
@@ -94,6 +97,8 @@ public class NewPlacePresenter implements Mvp.Presenter<NewPlaceMvp.View>, DayLi
 
     public void savePlace() {
         if(!presenterHelper.isViewAttached()) { return; }
+
+        presenterHelper.getView().showProgress(true);
 
         PlaceEntry placeEntry = new PlaceEntry(key,
                 placeName,

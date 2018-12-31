@@ -14,6 +14,8 @@ public interface NewPlaceMvp {
         void onEditWeek(int hourOfDay, int minutes);
 
         void requestEdit(String key);
+
+        void showProgress(boolean show);
     }
 
     interface Model extends Mvp.Model<Model.Callback> {

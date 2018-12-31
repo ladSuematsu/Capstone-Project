@@ -6,13 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".overview.MapActivity">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@color/colorTransparent"
-        app:popupTheme="@style/AppTheme.PopupOverlay" />
-
     <include
         android:id="@+id/include"
         layout="@layout/content_map" />
@@ -46,9 +39,26 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/fab_margin"
         android:layout_marginTop="@dimen/fab_margin"
-        app:layout_anchor="@+id/include"
         app:layout_anchorGravity="start|end"
         app:fabSize="mini"
         app:srcCompat="@drawable/ic_directions_run_white_24dp" />
+
+    <FrameLayout android:id="@+id/progress"
+        android:focusableInTouchMode="true"
+        android:focusable="true"
+        android:clickable="true"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorTransparentOverlay">
+
+        <ProgressBar
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            />
+
+    </FrameLayout>
 
 </android.support.design.widget.CoordinatorLayout>

@@ -36,7 +36,6 @@ public class OverviewModel implements OverviewMvp.Model {
 
     @Override
     public void refreshPlaces() {
-        //TODO: get user's actual location
         locationHelper.startListening(locationListener);
     }
 
