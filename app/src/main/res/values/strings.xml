@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">Drugstore Finder</string>
-    <string name="title_activity_main">Nearby</string>
     <string name="title_activity_map">Nearby</string>
     <string name="title_activity_place_details">Details</string>
     <string name="title_activity_place_details_edit">Edit details</string>
