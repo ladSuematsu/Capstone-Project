@@ -8,6 +8,10 @@ import android.support.v4.app.Fragment;
 
 import com.ladsuematsu.capstoneproject.external.util.PermissionUtil;
 
+/**
+ * Reference source:
+ * https://medium.com/@ali.muzaffar/use-headless-fragment-for-android-m-run-time-permissions-and-to-check-network-connectivity-b48615f6272d
+ */
 public abstract class PermissionCheckerHeadlessFragment extends Fragment {
 
     private PermissionCheckerCallback callback;

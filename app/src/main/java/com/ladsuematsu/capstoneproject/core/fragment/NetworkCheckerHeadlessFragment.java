@@ -11,6 +11,10 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 
+/**
+ * Partial implementation reference:
+ * https://stackoverflow.com/questions/15698790/broadcast-receiver-for-checking-internet-connection-in-android-app
+ */
 public class NetworkCheckerHeadlessFragment extends Fragment  {
 
     public static final String DEFAULT_TAG = NetworkCheckerHeadlessFragment.class.getSimpleName();
