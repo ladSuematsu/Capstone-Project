@@ -45,9 +45,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/fab_margin"
-        android:layout_marginBottom="@dimen/fab_margin"
+        android:layout_marginTop="@dimen/fab_margin"
         app:layout_anchor="@+id/include"
-        app:layout_anchorGravity="start|bottom"
+        app:layout_anchorGravity="start|end"
         app:fabSize="mini"
         app:srcCompat="@drawable/ic_directions_run_white_24dp" />
 
