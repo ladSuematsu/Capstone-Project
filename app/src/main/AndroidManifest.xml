@@ -53,7 +53,7 @@
             android:label="@string/title_activity_main" />
         <activity
             android:name=".overview.MapActivity"
-            android:label="@string/title_activity_map"
+            android:label="@string/app_name"
             android:launchMode="singleTask"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>

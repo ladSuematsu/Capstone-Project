@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Capstone Project</string>
+    <string name="app_name">Drugstore Finder</string>
     <string name="title_activity_main">Nearby</string>
     <string name="title_activity_map">Nearby</string>
     <string name="title_activity_place_details">Details</string>
