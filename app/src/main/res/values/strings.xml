@@ -1,4 +1,38 @@
 <resources>
-    <string name="app_name">Capstone Project</string>
-    <string name="title_activity_main">Nearby</string>
+    <string name="app_name">Drugstore Finder</string>
+    <string name="title_activity_map">Nearby</string>
+    <string name="title_activity_place_details">Details</string>
+    <string name="title_activity_place_details_edit">Edit details</string>
+    <string name="title_activity_login">Sign in</string>
+
+    <string name="place_search_hint">Type in an address or location name</string>
+    <string name="content_undefined">undefined</string>
+    <string name="day_closed">CLOSED</string>
+    <string name="label_edit">edit</string>
+
+    <string name="label_sunday">Sunday</string>
+    <string name="label_monday">Monday</string>
+    <string name="label_thursday">Thursday</string>
+    <string name="label_wednesday">Wednesday</string>
+    <string name="label_tuesday">Tuesday</string>
+    <string name="label_friday">Friday</string>
+    <string name="label_saturday">Saturday</string>
+
+    <string name="edit_place_save">Save</string>
+
+    <string name="amenity_animal_friendly">Animal friendly</string>
+    <string name="amenity_disabled_people">Facilities for disabled people</string>
+    <string name="amenity_door_delivery">Does door delivery</string>
+    <string name="open_close_hour_weekday_format">%s - %s</string>
+    <string name="label_place_details">Details</string>
+    <string name="place_detail_header_check_fields">Ammenities</string>
+    <string name="place_detail_header_weekday_times_fields">Schedule</string>
+
+    <string name="error_must_enable_location_permissions">The app must have Location permissions enabled in order to function</string>
+    <string name="open_app_settings">open settings</string>
+    <string name="overview_content_description_logout">logout user</string>
+    <string name="overview_content_description_login">go to login session</string>
+    <string name="overview_content_description_add_new_drugstore">add new drugstore</string>
+    <string name="error_no_network">No internet, check your connection</string>
+
 </resources>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="place_edit_action_edit_start">edit</string>
+    <string name="place_edit_action_edit_save">save</string>
+    <string name="place_detail_edit_phone_number">phone number</string>
+    <string name="place_detail_edit_address_search">search</string>
+    <string name="place_detail_edit_address">address</string>
+    <string name="place_detail_edit_name">name</string>
+
+</resources>

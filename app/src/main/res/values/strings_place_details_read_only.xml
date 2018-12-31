@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="place_detail_read_only_undefined">undefined</string>
+    <string name="place_detail_read_only_label_address">Address</string>
+    <string name="place_detail_read_only_label_phone_number">Phone Number</string>
+    <string name="place_detail_read_only_checkbox_content_description_yes">yes</string>
+    <string name="place_detail_read_only_checkbox_content_description_no">no</string>
+</resources>
