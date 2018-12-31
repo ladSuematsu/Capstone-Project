@@ -64,23 +64,28 @@
 
             </android.support.design.widget.TextInputLayout>
 
-            <Button
-                android:id="@+id/email_sign_in_button"
-                style="?android:textAppearanceSmall"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+            <LinearLayout android:orientation="horizontal"
+                android:layout_gravity="end"
                 android:layout_marginTop="16dp"
-                android:text="@string/action_sign_in"
-                android:textStyle="bold" />
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
 
-            <Button
-                android:id="@+id/email_sign_up_button"
-                style="?android:textAppearanceSmall"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="@string/action_sign_up"
-                android:textStyle="bold" />
+                <Button style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"
+                    android:id="@+id/email_sign_up"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/action_sign_up"
+                    android:textStyle="bold" />
+
+                <Button style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"
+                    android:id="@+id/email_sign_in"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/action_sign_in"
+                    android:textStyle="bold" />
+
+
+            </LinearLayout>
 
         </LinearLayout>
     </ScrollView>
