@@ -24,6 +24,7 @@
         android:layout_height="wrap_content">
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab"
+            android:contentDescription="@string/overview_content_description_add_new_drugstore"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/fab_margin"
@@ -31,6 +32,7 @@
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/login_fab"
+            android:contentDescription="@string/overview_content_description_login"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/fab_margin"
@@ -54,12 +56,16 @@
             app:layout_anchorGravity="top|center_horizontal" />
     </android.support.design.card.MaterialCardView>
 
-    <ImageButton
+    <android.support.design.widget.FloatingActionButton
         android:id="@+id/log_out"
+        android:contentDescription="@string/overview_content_description_logout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/fab_margin"
+        android:layout_marginBottom="@dimen/fab_margin"
         app:layout_anchor="@+id/include"
         app:layout_anchorGravity="start|bottom"
+        app:fabSize="mini"
         app:srcCompat="@drawable/ic_directions_run_white_24dp" />
 
 </android.support.design.widget.CoordinatorLayout>

@@ -31,5 +31,8 @@
 
     <string name="error_must_enable_location_permissions">The app must have Location permissions enabled in order to function</string>
     <string name="open_app_settings">open settings</string>
+    <string name="overview_content_description_logout">logout user</string>
+    <string name="overview_content_description_login">go to login session</string>
+    <string name="overview_content_description_add_new_drugstore">add new drugstore</string>
 
 </resources>
