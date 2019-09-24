@@ -2,12 +2,6 @@ package com.ladsuematsu.capstoneproject.login.activity;
 
 import android.annotation.TargetApi;
 import android.content.Intent;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.FragmentManager;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-
 import android.os.Build;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -19,12 +13,18 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.ladsuematsu.capstoneproject.core.fragment.NetworkCheckerHeadlessFragment;
-import com.ladsuematsu.capstoneproject.overview.MapActivity;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.fragment.app.FragmentManager;
+
+import com.google.android.material.snackbar.Snackbar;
 import com.ladsuematsu.capstoneproject.R;
+import com.ladsuematsu.capstoneproject.core.fragment.NetworkCheckerHeadlessFragment;
 import com.ladsuematsu.capstoneproject.login.mvp.LoginMvp;
 import com.ladsuematsu.capstoneproject.login.mvp.model.LoginModel;
 import com.ladsuematsu.capstoneproject.login.mvp.presenter.LoginPresenter;
+import com.ladsuematsu.capstoneproject.overview.MapActivity;
 import com.ladsuematsu.capstoneproject.util.UiUtils;
 
 public class LoginActivity extends AppCompatActivity implements NetworkCheckerHeadlessFragment.NetworkCheckerCallback {

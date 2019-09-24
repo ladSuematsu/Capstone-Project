@@ -2,14 +2,13 @@ package com.ladsuematsu.capstoneproject.overview;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
@@ -20,9 +19,10 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.ladsuematsu.capstoneproject.core.data.adapter.AuthWatcher;
-import com.ladsuematsu.capstoneproject.overview.fragment.DrugstorePanelInfo;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.ladsuematsu.capstoneproject.R;
+import com.ladsuematsu.capstoneproject.core.data.adapter.AuthWatcher;
 import com.ladsuematsu.capstoneproject.core.di.component.AppComponent;
 import com.ladsuematsu.capstoneproject.core.entity.PlaceEntry;
 import com.ladsuematsu.capstoneproject.core.fragment.LocationPermissionCheckerHeadlessFragment;
@@ -30,6 +30,7 @@ import com.ladsuematsu.capstoneproject.core.fragment.NetworkCheckerHeadlessFragm
 import com.ladsuematsu.capstoneproject.core.fragment.PermissionCheckerHeadlessFragment;
 import com.ladsuematsu.capstoneproject.login.activity.LoginActivity;
 import com.ladsuematsu.capstoneproject.newplace.activity.NewPlaceActivity;
+import com.ladsuematsu.capstoneproject.overview.fragment.DrugstorePanelInfo;
 import com.ladsuematsu.capstoneproject.overview.mvp.OverviewMvp;
 import com.ladsuematsu.capstoneproject.overview.mvp.model.OverviewModel;
 import com.ladsuematsu.capstoneproject.overview.mvp.presenter.OverviewPresenter;
@@ -59,9 +60,9 @@ public class MapActivity extends AppCompatActivity implements PermissionCheckerH
         @Override
         public void onValidated() {
 
-            addPlaceFab.setVisibility(View.VISIBLE);
+            addPlaceFab.show();
             logoutButton.setVisibility(View.VISIBLE);
-            loginFab.setVisibility(View.GONE);
+            loginFab.hide();
 
             if (map != null) {
                 presenter.requestPlacesInVicinity();
@@ -80,8 +81,8 @@ public class MapActivity extends AppCompatActivity implements PermissionCheckerH
         public void onRefreshInvalidated() {
 
             logoutButton.setVisibility(View.GONE);
-            addPlaceFab.setVisibility(View.GONE);
-            loginFab.setVisibility(View.VISIBLE);
+            addPlaceFab.hide();
+            loginFab.show();
 
             presenter.requestPlacesInVicinity();
         }

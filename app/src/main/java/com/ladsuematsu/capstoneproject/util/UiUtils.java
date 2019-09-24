@@ -6,11 +6,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.os.Build;
-import android.support.annotation.NonNull;
-import android.support.design.widget.BottomSheetBehavior;
-import android.support.design.widget.BottomSheetDialog;
-import android.support.design.widget.Snackbar;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.Html;
 import android.text.Spanned;
 import android.util.DisplayMetrics;
@@ -20,6 +15,14 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.snackbar.Snackbar;
+import com.ladsuematsu.capstoneproject.R;
 
 public class UiUtils {
 
@@ -48,7 +51,7 @@ public class UiUtils {
     public static Snackbar showSnackbar(View view, String message, String actionLabel, int duration, View.OnClickListener listener) {
         final Snackbar snackbar = Snackbar.make(view, message, duration);
 
-        TextView snackbarText = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+        TextView snackbarText = (TextView) snackbar.getView().findViewById(R.id.snackbar_text);
         snackbarText.setMaxLines(999);
 
         if (actionLabel != null) {
@@ -158,7 +161,7 @@ public class UiUtils {
             @Override
             public void onShow(DialogInterface dialogInterface) {
                 BottomSheetDialog bottomSheetDialog = (BottomSheetDialog) dialogInterface;
-                View bottomSheetInternal = bottomSheetDialog.findViewById(android.support.design.R.id.design_bottom_sheet);
+                View bottomSheetInternal = bottomSheetDialog.findViewById(R.id.design_bottom_sheet);
                 expandDialog(bottomSheetInternal);
                 cancelDialogDrag(bottomSheetInternal);
             }

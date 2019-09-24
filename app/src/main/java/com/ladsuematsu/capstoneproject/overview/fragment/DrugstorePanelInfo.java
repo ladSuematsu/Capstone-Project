@@ -3,16 +3,17 @@ package com.ladsuematsu.capstoneproject.overview.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.ladsuematsu.capstoneproject.core.fragment.InfoPanelBottomSheetDialog;
+import androidx.annotation.Nullable;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+
 import com.ladsuematsu.capstoneproject.R;
 import com.ladsuematsu.capstoneproject.core.entity.PlaceEntry;
+import com.ladsuematsu.capstoneproject.core.fragment.InfoPanelBottomSheetDialog;
 import com.ladsuematsu.capstoneproject.newplace.detail.PlaceDetailsActivity;
 import com.ladsuematsu.capstoneproject.newplace.mvp.NewPlaceMvp;
 import com.ladsuematsu.capstoneproject.widget.PlaceWidgetUpdateReceiver;

@@ -2,10 +2,6 @@ package com.ladsuematsu.capstoneproject.core.fragment;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.BottomSheetDialog;
-import android.support.design.widget.BottomSheetDialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +9,11 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.ladsuematsu.capstoneproject.R;
 import com.ladsuematsu.capstoneproject.util.UiUtils;
 
@@ -41,7 +42,7 @@ public abstract class InfoPanelBottomSheetDialog extends BottomSheetDialogFragme
         getDialog().setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
             public void onShow(DialogInterface dialog) {
-                View dialogView = ((BottomSheetDialog) dialog).findViewById(android.support.design.R.id.design_bottom_sheet);
+                View dialogView = ((BottomSheetDialog) dialog).findViewById(R.id.design_bottom_sheet);
 
                 UiUtils.setBottomSheetDialogPeekHeight(dialogView, 2);
             }
